@@ -27,12 +27,12 @@
 }
 
 .button-container {
-  background-color: white;
+  background-color: rgba(43, 255, 0, 0);
   display: flex;
   justify-content: space-between;
   width: 100%; /* Ajusta el ancho del contenedor según sea necesario */
   margin: 100px auto 0 auto; /* Centra el contenedor horizontalmente y ajusta el margen superior */
-  padding: 20px 0; /* Añade espacio interno superior e inferior */
+  padding: 20px ; /* Añade espacio interno superior e inferior */
   padding-top: 20px; /* Añade espacio superior para no superponerse con la barra */
 }
 
@@ -49,13 +49,15 @@
   background-color: #ffc4d4;
   border: none;
   color: black;
-  padding: 15px 32px;
+
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 16px;
+  font-size: 80px;
   margin: 4px 2px;
   cursor: pointer;
+  margin-right: 300px;
+  padding: 80px 100px;
 }
 
 

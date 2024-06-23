@@ -4,16 +4,16 @@ const { Client } = pg
 const sentencia = async()=>{
     const client = new Client({
         user: 'postgres',
-        password: 'isaiasxd',
+        password: '1234',
         host: 'localhost',
         port: 5432,
-        database: 'TiendasComerciales',
+        database: 'a',
     })
     await client.connect()
     
-    const res = await client.query('select * from boleta')
+    const res = await client.query('select * from venta')
     await client.end()
-    result = rest,rows[0].mesagge;
+    return res.rows
 };
 
 sentencia().then((result)=>{

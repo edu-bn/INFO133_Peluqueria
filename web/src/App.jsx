@@ -1,19 +1,22 @@
+import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import Home from './components/Home.jsx';
+import Reserva from './components/Reserva.jsx';
 import './App.css'
+import Productos from "./components/Productos.jsx";
+
 
 function App() {
   //const [count, setCount] = useState(0)
 
   return (
-    <>
-      <div className='top-bar'>
-      <h1 className='peluqueria'>DENTREN ̶f̶u̶e̶r̶a̶VENEKOS</h1>
-      </div>
-      <div className='button-container'>
-        <button className='button'>Servicios</button>
-        <button className='button'>Productos</button>
-      </div>
-      <div className='down-bar' />
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home/>}/>
+        <Route path="/reserva" element={<Reserva/>}/>
+        <Route path="/productos" element={<Productos/>}/>
+        <Route path="*" element={<h1>aonde te metiste wons</h1>} />
+      </Routes>
+    </Router>
   )
 }
 

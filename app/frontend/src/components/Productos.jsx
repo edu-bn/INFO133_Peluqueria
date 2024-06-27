@@ -1,7 +1,9 @@
+import ListaProductos from "./ListaProductos.jsx";
+
 const Productos = () => {
     return (
       <div>
-        <h1>Productos :v</h1>
+        <ListaProductos />
       </div>
     );
   };

@@ -21,14 +21,16 @@ const ListaProductos = () => {
 
   return (
     <div>
-      <h2>Listado de Productos</h2>
-      <ul>
+      <div>
+      
+      <ul className='lista_productos'>
         {productos.map((producto) => (
           <li key={producto.id_producto}>
-            {producto.nombre} - ${producto.valor}
+            {producto.id_producto} - {producto.nombre} - ${producto.valor} - {producto.stock}
           </li>
         ))}
       </ul>
+      </div>
     </div>
   );
 };

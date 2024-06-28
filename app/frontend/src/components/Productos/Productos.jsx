@@ -1,5 +1,5 @@
 import ListaProductos from "./ListaProductos.jsx";
-import Top from "./Top.jsx";
+import Top from "../Top.jsx";
 
 const Productos = () => {
     return (

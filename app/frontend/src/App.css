@@ -1,3 +1,14 @@
+
+/* Asegúrate de que el contenedor principal tenga suficiente margen superior e inferior */
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  padding-top: 100px; /* Añade espacio superior para la barra superior */
+  padding-bottom: 50px; /* Añade espacio inferior para la barra inferior */
+}
+
 .top-bar {
   width: 100%;
   position: fixed; /* Fija la barra en la parte superior */
@@ -26,16 +37,6 @@
   font-family: 'Arial', sans-serif;
 }
 
-.button-container {
-  background-color: rgba(43, 255, 0, 0);
-  display: flex;
-  justify-content: space-between;
-  width: 100%; /* Ajusta el ancho del contenedor según sea necesario */
-  margin: 100px auto 0 auto; /* Centra el contenedor horizontalmente y ajusta el margen superior */
-  padding: 20px ; /* Añade espacio interno superior e inferior */
-  padding-top: 20px; /* Añade espacio superior para no superponerse con la barra */
-}
-
 .peluqueria{
   color: #322203;
   text-align: center;
@@ -45,25 +46,4 @@
   font-family: 'Arial', sans-serif;
 }
 
-.button {
-  background-color: #ffc4d4;
-  border: none;
-  color: black;
 
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 80px;
-  margin: 4px 2px;
-  cursor: pointer;
-  margin-right: 300px;
-  padding: 80px 100px;
-}
-
-
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}

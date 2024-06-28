@@ -1,5 +1,3 @@
-
-// models/Producto.js
 const pool = require('../config/db.config');
 
 const getAllProductos = async () => {

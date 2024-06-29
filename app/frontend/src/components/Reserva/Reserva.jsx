@@ -1,8 +1,19 @@
+import Top from "../Top.jsx";
+
+import SeleccionarServicio from "./SeleccionarServicio.jsx";
+import SeleccionarProfesional from "./SeleccionarProfesional.jsx";
+import SeleccionarFecha from "./SeleccionarFecha.jsx";
+
 const Servicios = () => {
   return (
-    <div>
-      <h1>Reservar hora :v</h1>
+  <>
+    <Top text={'Reservar cita'}/>
+    <div className="horizontal-container">
+        <SeleccionarServicio/>
+        <SeleccionarProfesional/>
+        <SeleccionarFecha/>
     </div>
+  </>
   );
 };
 

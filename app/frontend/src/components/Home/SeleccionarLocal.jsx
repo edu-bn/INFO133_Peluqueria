@@ -2,11 +2,10 @@ import { useState } from "react";
 import { Select, FormControl, FormLabel } from "@chakra-ui/react";
 
 const local = [
-  { id: 1, name: 'ola' },
-  { id: 2, name: 'ola21' },
-  { id: 3, name: 'fme123' },
-  { id: 4, name: 'dje' },
-  { id: 5, name: 'op' },
+  { id: 1, name: 'local_1', id_comuna: 1 },
+    { id: 2, name: 'local_2', id_comuna: 2 },
+    { id: 3, name: 'local_3', id_comuna: 3 },
+    { id: 4, name: 'local_4', id_comuna: 4 } 
 ]
 
 const SeleccionarLocal = ({setLocalSeleccionado}) => {

@@ -1,11 +1,10 @@
 import { Select, FormControl, FormLabel } from "@chakra-ui/react";
 
 const region = [
-  { id: 1, name: 'ola' },
-  { id: 2, name: 'ola21' },
-  { id: 3, name: 'fme123' },
-  { id: 4, name: 'dje' },
-  { id: 5, name: 'op' },
+  { id: 1, name: 'Los rios' },
+  { id: 2, name: 'Tarapaca' },
+  { id: 3, name: 'Metropolitana' },
+  { id: 4, name: 'Los lagos' }
 ]
 
 const SeleccionarRegion = () => {

@@ -1,11 +1,10 @@
 import { Select, FormControl, FormLabel } from "@chakra-ui/react";
 
 const comuna = [
-  { id: 1, name: 'ola' },
-  { id: 2, name: 'ola21' },
-  { id: 3, name: 'fme123' },
-  { id: 4, name: 'dje' },
-  { id: 5, name: 'op' },
+    { id: 1, name: 'valdivia', id_region: 1 },
+    { id: 2, name: 'iquique', id_region: 2 },
+    { id: 3, name: 'santiago', id_region: 3 },
+    { id: 4, name: 'puerto montt', id_region: 4 }
 ]
 
 const SeleccionarComuna = () => {

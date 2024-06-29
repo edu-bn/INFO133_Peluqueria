@@ -12,19 +12,24 @@ import './Home.css';
 const Home = () => {
   const navigateTo = useNavigate();
   const [localSeleccionado, setLocalSeleccionado] = useState(null);
+  const [regionSeleccionada, setRegionSeleccionada] = useState(null);
+  const [comunaSeleccionada, setComunaSeleccionada] = useState(null);
   const [alertaVisible, setAlertaVisible] = useState(false);
 
   const handleClickReserva = () => {
-    console.log('en handleClickReserva');
     if(localSeleccionado){
-      navigateTo('/reserva');
+      navigateTo('/reserva', { state: {local: localSeleccionado } });
     } else {
       setAlertaVisible(true);
     }
   };
 
   const handleClickProductos= () => {
-    navigateTo('/productos');
+    if(localSeleccionado){
+      navigateTo('/productos');
+    } else {
+      setAlertaVisible(true);
+    }    
   };
 
   const handleCloseAlerta = () => {
@@ -36,8 +41,11 @@ const Home = () => {
     <>
       <Top text={'peluqueria'}/>  
       <div className='horizontal-container'>
-        <SeleccionarRegion/>
-        <SeleccionarComuna/>
+        <SeleccionarRegion setRegionSeleccionada={setRegionSeleccionada}/>
+        <SeleccionarComuna 
+          regionId={regionSeleccionada ? regionSeleccionada.id_region : null}
+          setComunaSeleccionada={setComunaSeleccionada}
+        />
         <SeleccionarLocal setLocalSeleccionado={setLocalSeleccionado}/>
       </div>
       {alertaVisible && <Alert status="warning" variant="subtle" mt={4} onClose={handleCloseAlerta}>
@@ -55,8 +63,6 @@ const Home = () => {
           </Button>
         </Stack>
       </div>
-      
-
       <div className='down-bar' />
     </>
   );

@@ -1,22 +1,42 @@
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Select, FormControl, FormLabel } from "@chakra-ui/react";
 
-const comuna = [
-    { id: 1, name: 'valdivia', id_region: 1 },
-    { id: 2, name: 'iquique', id_region: 2 },
-    { id: 3, name: 'santiago', id_region: 3 },
-    { id: 4, name: 'puerto montt', id_region: 4 }
-]
+const SeleccionarComuna = ({ regionId, setComunaSeleccionada}) => {
+  const [comuna, setComunas] = useState([]);
 
-const SeleccionarComuna = () => {
-    
+  
+  useEffect(() => {
+    const fetchComunas = async () => {
+      try {
+        let response;
+        if (regionId) {
+          response = await axios.get(`http://localhost:3000/api/comunas/region/${regionId}`);
+        } else {
+          response = await axios.get(`http://localhost:3000/api/comunas`);
+        }
+        setComunas(response.data);
+      } catch (error) {
+        console.error("Error fetching comunas:", error);
+      }
+    };
+
+    fetchComunas();
+  }, [regionId]);
+
+  const handleChange = (event) => {
+    const selectedComuna = comuna.find(comuna => comuna.id_comuna === parseInt(event.target.value));
+    setComunaSeleccionada(selectedComuna);
+  };
+
   return (
     <div>
       <FormControl>
         <FormLabel>Seleccionar Comuna</FormLabel>
-        <Select placeholder="Seleccione una opción">
-          {comuna.map((option) => (
-            <option key={option.id} value={option.name}>
-              {option.name}
+        <Select placeholder="Seleccione una opción" onChange={handleChange}>
+          {comuna.map((comuna) => (
+            <option key={comuna.id_comuna} value={comuna.id_comuna}>
+              {comuna.nombre}
             </option>
           ))}
         </Select>

@@ -1,14 +1,4 @@
--- DROP SCHEMA information_schema;
-
-CREATE SCHEMA information_schema AUTHORIZATION postgres;
-
--- DROP SCHEMA pg_catalog;
-
-CREATE SCHEMA pg_catalog AUTHORIZATION postgres;
-
--- DROP SCHEMA public;
-
-CREATE SCHEMA public AUTHORIZATION pg_database_owner;
+-- public.boleta_cita definition
 
 -- Drop table
 
@@ -23,6 +13,9 @@ CREATE TABLE public.boleta_cita (
 	CONSTRAINT boleta_pk PRIMARY KEY (id_boleta_cita)
 );
 
+
+-- public.boleta_venta definition
+
 -- Drop table
 
 -- DROP TABLE public.boleta_venta;
@@ -33,35 +26,62 @@ CREATE TABLE public.boleta_venta (
 	CONSTRAINT boleta_venta_pk PRIMARY KEY (id_boleta_venta)
 );
 
+
+-- public.hora_agendada definition
+
 -- Drop table
 
--- DROP TABLE public.cita;
+-- DROP TABLE public.hora_agendada;
 
-CREATE TABLE public.cita (
-	id_cita int4 NOT NULL,
-	fecha date NULL,
-	rut_cliente int4 NULL,
-	id_boleta_cita int4 NULL,
-	id_servicio int4 NULL,
-	CONSTRAINT cita_pk PRIMARY KEY (id_cita),
-	CONSTRAINT cita_boleta_cita_fk FOREIGN KEY (id_boleta_cita) REFERENCES public.boleta_cita(id_boleta_cita),
-	CONSTRAINT cita_cliente_fk FOREIGN KEY (rut_cliente) REFERENCES public.cliente(rut_cliente),
-	CONSTRAINT cita_servicio_fk FOREIGN KEY (id_servicio) REFERENCES public.servicio(id_servicio)
+CREATE TABLE public.hora_agendada (
+	fecha timestamp NOT NULL,
+	CONSTRAINT hora_agendada_pk PRIMARY KEY (fecha)
 );
 
+
+-- public.producto definition
+
 -- Drop table
 
--- DROP TABLE public.cliente;
+-- DROP TABLE public.producto;
 
-CREATE TABLE public.cliente (
-	rut_cliente int4 NOT NULL,
+CREATE TABLE public.producto (
+	id_producto int4 NOT NULL,
 	nombre varchar NULL,
-	apellido varchar NULL,
-	telefono int4 NULL,
-	id_comuna int4 NULL,
-	CONSTRAINT cliente_pk PRIMARY KEY (rut_cliente),
-	CONSTRAINT cliente_comuna_fk FOREIGN KEY (id_comuna) REFERENCES public.comuna(id_comuna)
+	valor int4 NULL,
+	CONSTRAINT producto_pk PRIMARY KEY (id_producto)
 );
+
+
+-- public.region definition
+
+-- Drop table
+
+-- DROP TABLE public.region;
+
+CREATE TABLE public.region (
+	nombre varchar NULL,
+	id_region int4 NOT NULL,
+	CONSTRAINT region_pk PRIMARY KEY (id_region)
+);
+
+
+-- public.servicio definition
+
+-- Drop table
+
+-- DROP TABLE public.servicio;
+
+CREATE TABLE public.servicio (
+	id_servicio int4 NOT NULL,
+	nombre varchar NULL,
+	costo int4 NULL,
+	duracion int4 NULL,
+	CONSTRAINT servicio_pk PRIMARY KEY (id_servicio)
+);
+
+
+-- public.comuna definition
 
 -- Drop table
 
@@ -70,9 +90,13 @@ CREATE TABLE public.cliente (
 CREATE TABLE public.comuna (
 	id_comuna int4 NOT NULL,
 	nombre varchar NULL,
-	region varchar NULL,
-	CONSTRAINT comuna_pk PRIMARY KEY (id_comuna)
+	id_region int4 NULL,
+	CONSTRAINT comuna_pk PRIMARY KEY (id_comuna),
+	CONSTRAINT comuna_region_fk FOREIGN KEY (id_region) REFERENCES public.region(id_region)
 );
+
+
+-- public.detalle definition
 
 -- Drop table
 
@@ -85,6 +109,9 @@ CREATE TABLE public.detalle (
 	CONSTRAINT detalle_boleta_venta_fk FOREIGN KEY (id_boleta_venta) REFERENCES public.boleta_venta(id_boleta_venta),
 	CONSTRAINT detalle_producto_fk FOREIGN KEY (id_producto) REFERENCES public.producto(id_producto)
 );
+
+
+-- public.empleado definition
 
 -- Drop table
 
@@ -101,18 +128,8 @@ CREATE TABLE public.empleado (
 	CONSTRAINT empleado_comuna_fk FOREIGN KEY (id_comuna) REFERENCES public.comuna(id_comuna)
 );
 
--- Drop table
 
--- DROP TABLE public."empleado-peluqueria";
-
-CREATE TABLE public."empleado-peluqueria" (
-	fecha_inicio date NULL,
-	fecha_fin varchar NULL,
-	id_peluqueria int4 NULL,
-	rut_empleado int4 NULL,
-	CONSTRAINT empleado_peluqueria_empleado_fk FOREIGN KEY (rut_empleado) REFERENCES public.empleado(rut_empleado),
-	CONSTRAINT empleado_peluqueria_peluqueria_fk FOREIGN KEY (id_peluqueria) REFERENCES public.peluqueria(id_peluqueria)
-);
+-- public."hora-servicio" definition
 
 -- Drop table
 
@@ -125,14 +142,8 @@ CREATE TABLE public."hora-servicio" (
 	CONSTRAINT hora_servicio_servicio_fk FOREIGN KEY (id_servicio) REFERENCES public.servicio(id_servicio)
 );
 
--- Drop table
 
--- DROP TABLE public.hora_agendada;
-
-CREATE TABLE public.hora_agendada (
-	fecha timestamp NOT NULL,
-	CONSTRAINT hora_agendada_pk PRIMARY KEY (fecha)
-);
+-- public.pago definition
 
 -- Drop table
 
@@ -146,6 +157,9 @@ CREATE TABLE public.pago (
 	CONSTRAINT pago_empleado_fk FOREIGN KEY (rut_empleado) REFERENCES public.empleado(rut_empleado)
 );
 
+
+-- public.peluqueria definition
+
 -- Drop table
 
 -- DROP TABLE public.peluqueria;
@@ -158,16 +172,8 @@ CREATE TABLE public.peluqueria (
 	CONSTRAINT peluqueria_comuna_fk FOREIGN KEY (id_comuna) REFERENCES public.comuna(id_comuna)
 );
 
--- Drop table
 
--- DROP TABLE public.producto;
-
-CREATE TABLE public.producto (
-	id_producto int4 NOT NULL,
-	nombre varchar NULL,
-	valor int4 NULL,
-	CONSTRAINT producto_pk PRIMARY KEY (id_producto)
-);
+-- public."producto-peluqueria" definition
 
 -- Drop table
 
@@ -180,6 +186,9 @@ CREATE TABLE public."producto-peluqueria" (
 	CONSTRAINT producto_peluqueria_peluqueria_fk FOREIGN KEY (id_peluqueria) REFERENCES public.peluqueria(id_peluqueria),
 	CONSTRAINT producto_peluqueria_producto_fk FOREIGN KEY (id_producto) REFERENCES public.producto(id_producto)
 );
+
+
+-- public.profesion definition
 
 -- Drop table
 
@@ -194,6 +203,9 @@ CREATE TABLE public.profesion (
 	CONSTRAINT profesion_empleado_fk FOREIGN KEY (rut_empleado) REFERENCES public.empleado(rut_empleado)
 );
 
+
+-- public."profesion-hora" definition
+
 -- Drop table
 
 -- DROP TABLE public."profesion-hora";
@@ -204,6 +216,9 @@ CREATE TABLE public."profesion-hora" (
 	CONSTRAINT profesion_hora_hora_agendada_fk FOREIGN KEY (fecha) REFERENCES public.hora_agendada(fecha),
 	CONSTRAINT profesion_hora_profesion_fk FOREIGN KEY (id_profesion) REFERENCES public.profesion(id_profesion)
 );
+
+
+-- public."profesion-servicio" definition
 
 -- Drop table
 
@@ -216,14 +231,54 @@ CREATE TABLE public."profesion-servicio" (
 	CONSTRAINT profesion_servicio_servicio_fk FOREIGN KEY (id_servicio) REFERENCES public.servicio(id_servicio)
 );
 
+
+-- public.cliente definition
+
 -- Drop table
 
--- DROP TABLE public.servicio;
+-- DROP TABLE public.cliente;
 
-CREATE TABLE public.servicio (
-	id_servicio int4 NOT NULL,
+CREATE TABLE public.cliente (
+	rut_cliente int4 NOT NULL,
 	nombre varchar NULL,
-	costo int4 NULL,
-	duracion int4 NULL,
-	CONSTRAINT servicio_pk PRIMARY KEY (id_servicio)
+	apellido varchar NULL,
+	telefono int4 NULL,
+	id_comuna int4 NULL,
+	CONSTRAINT cliente_pk PRIMARY KEY (rut_cliente),
+	CONSTRAINT cliente_comuna_fk FOREIGN KEY (id_comuna) REFERENCES public.comuna(id_comuna)
+);
+
+
+-- public."empleado-peluqueria" definition
+
+-- Drop table
+
+-- DROP TABLE public."empleado-peluqueria";
+
+CREATE TABLE public."empleado-peluqueria" (
+	fecha_inicio date NULL,
+	fecha_fin varchar NULL,
+	id_peluqueria int4 NULL,
+	rut_empleado int4 NULL,
+	CONSTRAINT empleado_peluqueria_empleado_fk FOREIGN KEY (rut_empleado) REFERENCES public.empleado(rut_empleado),
+	CONSTRAINT empleado_peluqueria_peluqueria_fk FOREIGN KEY (id_peluqueria) REFERENCES public.peluqueria(id_peluqueria)
+);
+
+
+-- public.cita definition
+
+-- Drop table
+
+-- DROP TABLE public.cita;
+
+CREATE TABLE public.cita (
+	id_cita int4 NOT NULL,
+	fecha date NULL,
+	rut_cliente int4 NULL,
+	id_boleta_cita int4 NULL,
+	id_servicio int4 NULL,
+	CONSTRAINT cita_pk PRIMARY KEY (id_cita),
+	CONSTRAINT cita_boleta_cita_fk FOREIGN KEY (id_boleta_cita) REFERENCES public.boleta_cita(id_boleta_cita),
+	CONSTRAINT cita_cliente_fk FOREIGN KEY (rut_cliente) REFERENCES public.cliente(rut_cliente),
+	CONSTRAINT cita_servicio_fk FOREIGN KEY (id_servicio) REFERENCES public.servicio(id_servicio)
 );

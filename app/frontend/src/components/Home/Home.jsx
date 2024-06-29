@@ -46,7 +46,11 @@ const Home = () => {
           regionId={regionSeleccionada ? regionSeleccionada.id_region : null}
           setComunaSeleccionada={setComunaSeleccionada}
         />
-        <SeleccionarLocal setLocalSeleccionado={setLocalSeleccionado}/>
+        <SeleccionarLocal
+          comunaId={comunaSeleccionada ? comunaSeleccionada.id_comuna : null}
+          regionId={regionSeleccionada ? regionSeleccionada.id_region : null}
+          setLocalSeleccionado={setLocalSeleccionado}
+        />
       </div>
       {alertaVisible && <Alert status="warning" variant="subtle" mt={4} onClose={handleCloseAlerta}>
         <AlertIcon />

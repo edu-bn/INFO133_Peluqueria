@@ -20,7 +20,6 @@ const SeleccionarRegion = ({ setRegionSeleccionada }) => {
   }, []);
 
   const handleChange = (event) => {
-    console.log('in handleChange', parseInt(event.target.value));
     const selectedRegion = regiones.find(region => region.id_region === parseInt(event.target.value));
     setRegionSeleccionada(selectedRegion);
   };

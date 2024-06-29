@@ -3,7 +3,12 @@ Un salón de belleza tiene sedes en todo Chile y el sistema que utiliza actualme
 
 # ¿Como iniciar la pagina web?
 
-Debe ubicarse en la carpeta app y ejecutar el siguiente comando:
+Primero debe intalar las dependencias de la carpeta app, frontend, backend, para eso debe ubicarse en esas carpetas y ejecutar el siguiente comando
+```bash
+npm install
+```
+
+Luego para iniciar la pagina se debe ubicar en la carpeta app y ejecutar el siguiente comando:
 ```bash
 npm run start
 ```

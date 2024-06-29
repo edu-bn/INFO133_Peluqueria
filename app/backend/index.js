@@ -3,6 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const productosRoutes = require('./routes/productos');
+const regionesRoutes = require('./routes/regiones');
+const comunasRoutes = require('./routes/comunas');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,6 +17,8 @@ app.use(bodyParser.json());
 
 // Rutas
 app.use('/api/productos', productosRoutes);
+app.use('/api/regiones', regionesRoutes);
+app.use('/api/comunas', comunasRoutes);
 // Puedes agregar más rutas aquí
 
 // Iniciar servidor

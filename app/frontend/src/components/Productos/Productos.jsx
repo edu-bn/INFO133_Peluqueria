@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import ListaProductos from "./ListaProductos.jsx";
+import AddButton from './AddButton.jsx';
 import Top from "../Top.jsx";
 import {
   Table,
@@ -20,6 +21,11 @@ const Productos = () => {
     setProductos(productos);
   };
 
+  const handleButtonClick = () => {
+    // Lógica para manejar el clic del botón (opcional)
+    console.log('Botón añadir clickeado');
+  };
+  
   return (
     <div>
       <Top text={'Productos'}></Top>
@@ -31,6 +37,8 @@ const Productos = () => {
               <Th>Id producto</Th>
               <Th>Nombre del producto</Th>
               <Th isNumeric>Precio</Th>
+              <Th>Stock</Th>
+              <Th>Añadir</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -39,6 +47,10 @@ const Productos = () => {
                 <Td>{producto.id_producto}</Td>
                 <Td>{producto.nombre}</Td>
                 <Td isNumeric>${producto.valor}</Td>
+                <Td>1</Td>
+                <Td>
+                  <AddButton onClick={handleButtonClick} />
+                </Td>
               </Tr>
             ))}
           </Tbody>

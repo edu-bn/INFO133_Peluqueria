@@ -1,12 +1,12 @@
 import { Select, FormControl, FormLabel } from "@chakra-ui/react";
 
 
-const SeleccionarServicio = () => {
+const SeleccionarHora = () => {
 
     return(
         <div>
             <FormControl>
-                <FormLabel>Seleccionar Servicio</FormLabel>
+                <FormLabel>Seleccionar Hora</FormLabel>
                 <Select placeholder="Seleccione una opcion">
                    
                   
@@ -18,4 +18,4 @@ const SeleccionarServicio = () => {
 
 }
 
-export default SeleccionarServicio
+export default SeleccionarHora

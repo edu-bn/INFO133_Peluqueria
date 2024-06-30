@@ -1,31 +1,19 @@
-import { Select, FormControl, FormLabel } from "@chakra-ui/react";
+import React, { useState } from "react";
+import DatePicker from "react-datepicker";
+import './SeleccionarFecha.css';
+import "react-datepicker/dist/react-datepicker.css";
 
-const fechas = [
-    {id: 1, name : 'hoy'},
-    {id: 2, name : 'mañana'},
-    {id: 3, name : 'ayer'},
-    {id: 4, name : 'en 10'},
-    {id: 5, name : 'si'},
-]
+// CSS Modules, react-datepicker-cssmodules.css
+// import 'react-datepicker/dist/react-datepicker-cssmodules.css';
 
 const SeleccionarFecha = () => {
+  const [startDate, setStartDate] = useState(new Date());
+  return (
+    <div>
+        <label htmlFor="datePicker" className="datepicker-label">Seleccionar fecha</label>
+        <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
+    </div>
+  );
+};
 
-    return(
-        <div>
-            <FormControl>
-                <FormLabel>Seleccionar Fecha</FormLabel>
-                <Select placeholder="Seleccione una opcion">
-                    {fechas.map((option)=> (
-                      <option key={option.id} value={option.name}>
-                      {option.name}
-                    </option>   
-                    ))}
-                </Select>
-            </FormControl>
-        </div>
-    )
-
-
-}
-
-export default SeleccionarFecha
+export default SeleccionarFecha;

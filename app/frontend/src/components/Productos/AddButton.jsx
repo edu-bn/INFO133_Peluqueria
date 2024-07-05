@@ -1,4 +1,3 @@
-import React from 'react';
 import { Button, ButtonGroup } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 

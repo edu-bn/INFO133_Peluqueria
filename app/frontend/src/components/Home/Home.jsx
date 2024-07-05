@@ -26,7 +26,7 @@ const Home = () => {
 
   const handleClickProductos= () => {
     if(localSeleccionado){
-      navigateTo('/productos');
+      navigateTo('/productos', { state: {local: localSeleccionado } });
     } else {
       setAlertaVisible(true);
     }    

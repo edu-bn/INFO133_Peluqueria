@@ -1,16 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import axios from 'axios';
 
+// Componente que obtiene la lista de productos desde el backend
 const ListaProductos = ({ onProductosLoaded }) => {
-  const [productos, setProductos] = useState([]);
-
   useEffect(() => {
-    // Función para obtener la lista de productos
     const getProductos = async () => {
       try {
         const response = await axios.get('http://localhost:3000/api/productos');
-        setProductos(response.data);
-        // Llama a la función de callback para pasar los productos al componente padre
         if (onProductosLoaded) {
           onProductosLoaded(response.data);
         }
@@ -22,17 +18,7 @@ const ListaProductos = ({ onProductosLoaded }) => {
     getProductos();
   }, [onProductosLoaded]);
 
-  return (
-    <div>
-      <ul className='lista_productos'>
-        {productos.map((producto) => (
-          <li key={producto.id_producto}>
-            {producto.id_producto} - {producto.nombre} - ${producto.valor} - {producto.stock}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+  return null; // Este componente no necesita renderizar nada
 };
 
 export default ListaProductos;

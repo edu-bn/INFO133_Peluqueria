@@ -6,6 +6,9 @@ import ListaProductos from './ListaProductos.jsx';
 import Top from '../Top.jsx';
 import Buscador from './Buscador.jsx';
 import TablaProductos from './TablaProductos.jsx';
+import BuyButton from './BuyButton.jsx';
+import VentanaVenta from './VentanaVenta.jsx';
+
 import axios from 'axios';
 
 const Productos = () => {
@@ -21,6 +24,8 @@ const Productos = () => {
   const [productos, setProductos] = useState([]);
   const [filtro, setFiltro] = useState('ID');
   const [terminoBusqueda, setTerminoBusqueda] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
 
   useEffect(() => {
     // Este efecto se encargará de actualizar la lista de productos cuando el componente se monte
@@ -60,6 +65,14 @@ const Productos = () => {
     console.log('Botón añadir clickeado para producto:', producto);
   };
 
+  const handleBuyButtonClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div>
       <Top text={'Productos'}></Top>
@@ -73,6 +86,12 @@ const Productos = () => {
     </Alert>
     ) : (<div>
       <Buscador onFilterChange={handleFilterChange} onSearchChange={handleSearchChange} />
+      <BuyButton onClick={handleBuyButtonClick} 
+            size="xl"
+            boxSize="60px"
+            fontSize="24px"> 
+      </BuyButton>
+      <VentanaVenta isOpen={isModalOpen} onClose={handleCloseModal}/>
       <TablaProductos productos={productosFiltrados} onAddButtonClick={handleButtonClick} />
       <ListaProductos onProductosLoaded={setProductos} />
     </div>

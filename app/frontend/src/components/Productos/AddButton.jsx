@@ -1,13 +1,20 @@
-import { Button, ButtonGroup } from '@chakra-ui/react';
-import { AddIcon } from '@chakra-ui/icons';
+import {
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
+} from '@chakra-ui/react'
 
 const AddButton = ({ onClick }) => {
   return (
-    <ButtonGroup size='sm' isAttached variant='outline'>
-      <Button onClick={onClick}>Añadir</Button>
-      <Button leftIcon={<AddIcon />} onClick={onClick} variant="outline">
-      </Button>
-    </ButtonGroup>
+    <NumberInput min={0} size='md' maxW={20}>
+      <NumberInputField />
+      <NumberInputStepper>
+        <NumberIncrementStepper />
+        <NumberDecrementStepper />
+      </NumberInputStepper>
+    </NumberInput>
   );
 };
 

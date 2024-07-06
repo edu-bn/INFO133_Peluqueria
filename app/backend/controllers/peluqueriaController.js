@@ -38,10 +38,21 @@ const getPeluqueriaByRegion = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 }
+const getProductosByPeluqueria = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const productos = await Peluqueria.getProductosByPeluqueria(id);
+        res.json(productos);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+}
+
 
 module.exports = {
     getPeluquerias,
     getPeluqueria,
     getPeluqueriaByComuna,
-    getPeluqueriaByRegion
+    getPeluqueriaByRegion,
+    getProductosByPeluqueria
 };

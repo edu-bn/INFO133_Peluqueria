@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Alert, AlertIcon, AlertTitle, Button } from '@chakra-ui/react';
 
-import ListaProductos from './ListaProductos.jsx';
 import Top from '../Top.jsx';
 import Buscador from './Buscador.jsx';
 import TablaProductos from './TablaProductos.jsx';
@@ -14,7 +13,7 @@ import axios from 'axios';
 const Productos = () => {
   const navigateTo = useNavigate();
   const location = useLocation();
-  //const { local } = location.state || {};
+  const { local } = location.state || {};
   const showAlert = !location.state;
 
   const handleReturnHome = () => {
@@ -31,7 +30,7 @@ const Productos = () => {
     // Este efecto se encargará de actualizar la lista de productos cuando el componente se monte
     const getProductos = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/productos');
+        const response = await axios.get(`http://localhost:3000/api/peluquerias/productos/${local.id_peluqueria}`);
         setProductos(response.data);
       } catch (error) {
         console.error('Error al obtener productos:', error);
@@ -39,7 +38,7 @@ const Productos = () => {
     };
 
     getProductos();
-  }, []);
+  }, [local]);
 
   const handleFilterChange = useCallback((filtro) => {
     setFiltro(filtro);
@@ -93,7 +92,6 @@ const Productos = () => {
       </BuyButton>
       <VentanaVenta isOpen={isModalOpen} onClose={handleCloseModal}/>
       <TablaProductos productos={productosFiltrados} onAddButtonClick={handleButtonClick} />
-      <ListaProductos onProductosLoaded={setProductos} />
     </div>
     )}
     </div>

@@ -20,7 +20,7 @@ const TablaProductos = ({ productos, onAddButtonClick }) => {
               <Td>{producto.id_producto}</Td>
               <Td>{producto.nombre}</Td>
               <Td isNumeric>${producto.valor}</Td>
-              <Td>{producto.stock}</Td>
+              <Td>{producto.cant}</Td>
               <Td>
                 <AddButton onClick={() => onAddButtonClick(producto)} />
               </Td>

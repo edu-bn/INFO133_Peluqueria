@@ -1,4 +1,4 @@
-import { background, Button} from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
 
 const BuyButton = ({onClick}) => {
     const styles = {

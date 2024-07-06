@@ -8,7 +8,7 @@ import {
 
 const AddButton = ({ onClick }) => {
   return (
-    <NumberInput min={0} size='md' maxW={20}>
+    <NumberInput min={0} size='md' maxW={20} defaultValue={0}>
       <NumberInputField />
       <NumberInputStepper>
         <NumberIncrementStepper />

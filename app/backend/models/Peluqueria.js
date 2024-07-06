@@ -28,9 +28,27 @@ const getPeluqueriaByRegion = async (id) => {
     return rows;
 }
 
+const getProductosByPeluqueria = async (idPeluqueria) => {
+    const query = `
+        SELECT
+            pr.id_producto,
+            pr.nombre,
+            pr.valor,
+            pp.cant
+        FROM peluqueria p
+        JOIN "producto-peluqueria" pp ON p.id_peluqueria = pp.id_peluqueria
+        JOIN producto pr ON pp.id_producto = pr.id_producto
+        WHERE p.id_peluqueria = $1
+    `;
+    const values = [idPeluqueria];
+    const { rows } = await pool.query(query, values);
+    return rows;
+}
+
 module.exports = {
     getAllPeluquerias,
     getPeluqueriaById,
     getPeluqueriaByComuna,
-    getPeluqueriaByRegion
+    getPeluqueriaByRegion,
+    getProductosByPeluqueria
 };

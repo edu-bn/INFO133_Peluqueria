@@ -1,3 +1,5 @@
+SET datestyle = 'DMY';
+
 insert into region(id_region, nombre)
 values
 	(1, 'Los Lagos'),
@@ -6989,7 +6991,7 @@ VALUES
 	(3515,'20-05-2024' , 56700, 19759900),
 	(3516,'20-06-2024' , 85000, 19759900);
 
-INSERT INTO profesion-servicio(id_servicio, id_profesion) 
+INSERT INTO "profesion-servicio"(id_servicio, id_profesion) 
 VALUES
 	(21, 1),
 	(25, 1),
@@ -7782,7 +7784,7 @@ VALUES
 	(11, 100),
 	(15, 100),
 	(7, 100),
-	(18, 100),
+	(18, 100);
 
 INSERT INTO producto-peluqueria(cant, id_peluquiera, id_producto) 
 VALUES

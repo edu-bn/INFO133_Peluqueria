@@ -32,6 +32,14 @@ const Home = () => {
     }    
   };
 
+  const handleClickAdmin = () => {
+    if(localSeleccionado){
+      navigateTo('/admin', { state: {local: localSeleccionado } });
+    } else {
+      setAlertaVisible(true);
+    }
+  }
+
   const handleCloseAlerta = () => {
     console.log('en handleCloseAlerta');
     setAlertaVisible(false);
@@ -58,9 +66,12 @@ const Home = () => {
         <CloseButton position="absolute" right="8px" top="8px" onClick={handleCloseAlerta} />
       </Alert>}
       <div className='button-container'>
-        <Stack direction='row' spacing={500} align='center' justify='space-between'>
+        <Stack direction='row' spacing={200} align='center' justify='space-between'>
           <Button colorScheme="teal" onClick={handleClickReserva} size='lg'>
             Reservar hora
+          </Button>
+          <Button colorScheme="teal" onClick={handleClickAdmin} size='lg'>
+            Administrar
           </Button>
           <Button colorScheme="teal" onClick={handleClickProductos} size='lg'>
             Productos

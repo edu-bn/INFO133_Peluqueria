@@ -6,7 +6,7 @@ import {
   NumberDecrementStepper,
 } from '@chakra-ui/react'
 
-const AddButton = ({ onClick }) => {
+const ActualizarProducto = () => {
   return (
     <NumberInput min={0} size='md' maxW={20} defaultValue={0}>
       <NumberInputField />
@@ -18,4 +18,4 @@ const AddButton = ({ onClick }) => {
   );
 };
 
-export default AddButton;
+export default ActualizarProducto;

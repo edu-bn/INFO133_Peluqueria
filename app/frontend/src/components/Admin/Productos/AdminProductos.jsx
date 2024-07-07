@@ -2,15 +2,13 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Alert, AlertIcon, AlertTitle, Button } from '@chakra-ui/react';
 
-import Top from '../Top.jsx';
+import Top from '../../Top.jsx';
 import Buscador from './Buscador.jsx';
 import TablaProductos from './TablaProductos.jsx';
-import BuyButton from './BuyButton.jsx';
-import VentanaVenta from './VentanaVenta.jsx';
 
 import axios from 'axios';
 
-const Productos = () => {
+const AdminProductos = () => {
   const navigateTo = useNavigate();
   const location = useLocation();
   const { local } = location.state || {};
@@ -23,8 +21,6 @@ const Productos = () => {
   const [productos, setProductos] = useState([]);
   const [filtro, setFiltro] = useState('Nombre');
   const [terminoBusqueda, setTerminoBusqueda] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
 
   useEffect(() => {
     // Este efecto se encargará de actualizar la lista de productos cuando el componente se monte
@@ -60,42 +56,36 @@ const Productos = () => {
     );
   }, [productos, filtro, terminoBusqueda]);
 
-  const handleButtonClick = (producto) => {
-    console.log('Botón añadir clickeado para producto:', producto);
-  };
-
-  const handleBuyButtonClick = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleSave = async (producto) => {
+    try {
+      await axios.put(`http://localhost:3000/api/productos/${producto.id_producto}`, producto);
+      setProductos((prevProductos) =>
+        prevProductos.map((p) => (p.id_producto === producto.id_producto ? producto : p))
+      );
+    } catch (error) {
+      console.error('Error al guardar producto:', error);
+    }
   };
 
   return (
     <div>
-      <Top text={'Productos'}></Top>
-      {showAlert ? (    
-      <Alert status="error" variant="subtle" mt={4}>
-      <AlertIcon />
-      <AlertTitle>Por favor selecciona un local antes de continuar.</AlertTitle>
-      <Button onClick={handleReturnHome} colorScheme="teal" mt={4} size="md">
-        Volver a la página principal
-      </Button>
-    </Alert>
-    ) : (<div>
-      <Buscador onFilterChange={handleFilterChange} onSearchChange={handleSearchChange} />
-      <BuyButton onClick={handleBuyButtonClick} 
-            size="xl"
-            boxSize="60px"
-            fontSize="24px"> 
-      </BuyButton>
-      <VentanaVenta isOpen={isModalOpen} onClose={handleCloseModal}/>
-      <TablaProductos productos={productosFiltrados} onAddButtonClick={handleButtonClick} />
-    </div>
-    )}
+      <Top text={'Gestion de Productos'} />
+      {showAlert ? (
+        <Alert status="error" variant="subtle" mt={4}>
+          <AlertIcon />
+          <AlertTitle>Por favor selecciona un local antes de continuar.</AlertTitle>
+          <Button onClick={handleReturnHome} colorScheme="teal" mt={4} size="md">
+            Volver a la página principal
+          </Button>
+        </Alert>
+      ) : (
+        <div>
+          <Buscador onFilterChange={handleFilterChange} onSearchChange={handleSearchChange} />
+          <TablaProductos productos={productosFiltrados} onSave={handleSave} />
+        </div>
+      )}
     </div>
   );
 };
 
-export default Productos;
+export default AdminProductos;

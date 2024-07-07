@@ -26,11 +26,11 @@ const RegistroCliente = ({ isOpen, onClose }) => {
             </FormControl>
             <FormControl isRequired>
                 <FormLabel>Nombre</FormLabel>
-                <Input placeholder='Martin' />
+                <Input placeholder='Nombre' />
             </FormControl>
             <FormControl isRequired>
                 <FormLabel>Apellido</FormLabel>
-                <Input placeholder='Alvarado' />
+                <Input placeholder='Apellido' />
             </FormControl>
             <FormControl isRequired>
                 <FormLabel>Telefono</FormLabel>
@@ -38,7 +38,7 @@ const RegistroCliente = ({ isOpen, onClose }) => {
             </FormControl>
             <FormControl isRequired>
                 <FormLabel>Id Comuna</FormLabel>
-                <Input placeholder='1 (Puerto Montt)' />
+                <Input placeholder='1 - 20' />
             </FormControl>
         </ModalBody>
         <ModalFooter>

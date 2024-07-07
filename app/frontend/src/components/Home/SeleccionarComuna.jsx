@@ -32,7 +32,7 @@ const SeleccionarComuna = ({ regionId, setComunaSeleccionada}) => {
   return (
     <div>
       <FormControl>
-        <FormLabel>Seleccionar Comuna</FormLabel>
+        <FormLabel>2. Seleccionar Comuna</FormLabel>
         <Select placeholder="Seleccione una opción" onChange={handleChange}>
           {comuna.map((comuna) => (
             <option key={comuna.id_comuna} value={comuna.id_comuna}>

@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Alert, AlertIcon, AlertTitle, CloseButton, Button, Stack } from '@chakra-ui/react';
+import { Input } from '@chakra-ui/react'
+import {FormControl, FormLabel} from '@chakra-ui/react'
 
 import Top from '../Top.jsx';
 import SeleccionarRegion from './SeleccionarRegion.jsx';
 import SeleccionarComuna from './SeleccionarComuna.jsx';
 import SeleccionarLocal from './SeleccionarLocal.jsx';
+import RegistroCliente from './RegistroCliente.jsx';
 import './Home.css';
 
 
@@ -15,6 +18,7 @@ const Home = () => {
   const [regionSeleccionada, setRegionSeleccionada] = useState(null);
   const [comunaSeleccionada, setComunaSeleccionada] = useState(null);
   const [alertaVisible, setAlertaVisible] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleClickReserva = () => {
     if(localSeleccionado){
@@ -45,6 +49,14 @@ const Home = () => {
     setAlertaVisible(false);
   }
 
+  const handleConfirmarRegistro = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <>
       <Top text={'peluqueria'}/>  
@@ -65,6 +77,19 @@ const Home = () => {
         <AlertTitle mr={2}>Por favor selecciona un local antes de continuar.</AlertTitle>
         <CloseButton position="absolute" right="8px" top="8px" onClick={handleCloseAlerta} />
       </Alert>}
+      <div className='middle-container'>
+        <FormControl isRequired paddingBottom={'20px'}>
+          <FormLabel>Ingrese RUT del cliente sin digito verificador </FormLabel>
+          <Input placeholder='11111111'/>
+        </FormControl>
+        <Button colorScheme="teal" onClick={handleConfirmarRegistro} size='lg'>
+          Modal
+        </Button>
+        <Button colorScheme="teal" size='lg'>
+          Confirmar
+        </Button>
+        <RegistroCliente isOpen={isModalOpen} onClose={handleCloseModal}></RegistroCliente>
+      </div>
       <div className='button-container'>
         <Stack direction='row' spacing={200} align='center' justify='space-between'>
           <Button colorScheme="teal" onClick={handleClickReserva} size='lg'>

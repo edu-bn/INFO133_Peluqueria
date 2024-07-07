@@ -27,9 +27,21 @@ const updateProducto = async (id, nombre, valor) => {
   return rows[0];
 };
 
+const updateStockProducto = async (cantidad, id_producto, id_peluqueria) => {
+  const query = `
+    UPDATE "producto-peluqueria"
+    set cant = $1
+    WHERE id_producto = $2 AND id_peluqueria = $3
+    `;
+  const values = [cantidad, id_producto, id_peluqueria];
+  const { rows } = await pool.query(query, values);
+  return rows[0];
+};
+
 module.exports = {
   getAllProductos,
   getProductoById,
   createProducto,
   updateProducto,
+  updateStockProducto,
 };

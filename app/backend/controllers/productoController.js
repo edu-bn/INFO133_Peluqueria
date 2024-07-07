@@ -40,9 +40,23 @@ const actualizarProducto = async (req, res) => {
   }
 };
 
+const actualizarStockProducto = async (req, res) => {
+  const { id_producto, id_peluqueria } = req.params;
+  const { cantidad } = req.body;
+
+  try {
+    const productoActualizado = await Producto.updateStockProducto(cantidad, id_producto, id_peluqueria);
+    res.json(productoActualizado);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+
 module.exports = {
   getProductos,
   getProducto,
   crearProducto,
   actualizarProducto,
+  actualizarStockProducto,
 };

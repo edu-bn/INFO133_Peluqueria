@@ -23,7 +23,6 @@ const AdminProductos = () => {
   const [terminoBusqueda, setTerminoBusqueda] = useState('');
 
   useEffect(() => {
-    // Este efecto se encargará de actualizar la lista de productos cuando el componente se monte
     const getProductos = async () => {
       try {
         const response = await axios.get(`http://localhost:3000/api/peluquerias/productos/${local.id_peluqueria}`);
@@ -49,21 +48,41 @@ const AdminProductos = () => {
       return productos;
     }
 
-    return productos.filter((producto) =>
-      filtro === 'ID'
-        ? producto.id_producto.toString().includes(terminoBusqueda)
-        : producto.nombre.toLowerCase().includes(terminoBusqueda.toLowerCase())
-    );
+    const lowerCaseSearch = terminoBusqueda.toLowerCase();
+    return productos.filter((producto) => {
+      if (filtro === 'ID') {
+        return producto.id_producto.toString().includes(lowerCaseSearch);
+      } else if (filtro === 'Nombre') {
+        return producto.nombre.toLowerCase().includes(lowerCaseSearch);
+      }
+      return true;
+    });
   }, [productos, filtro, terminoBusqueda]);
 
-  const handleSave = async (producto) => {
+  const handleSaveProducto = async (producto) => {
+    console.log('Guardar producto:', producto);
+    const { id_producto, nombre, valor, cant } = producto;
     try {
-      await axios.put(`http://localhost:3000/api/productos/${producto.id_producto}`, producto);
-      setProductos((prevProductos) =>
-        prevProductos.map((p) => (p.id_producto === producto.id_producto ? producto : p))
+      await axios.put(`http://localhost:3000/api/productos/${id_producto}`, { nombre, valor });
+      await axios.put(`http://localhost:3000/api/productos/${id_producto}/peluquerias/${local.id_peluqueria}`, { cantidad: cant });
+
+      setProductos((prevProductos) => 
+        prevProductos.map((p) => (p.id_producto === id_producto ? producto : p))
       );
+
     } catch (error) {
       console.error('Error al guardar producto:', error);
+    }
+  };
+
+  const handleActualizarStock = async (id_producto, id_peluqueria, cantidad) => {
+    console.log('Actualizar stock del producto:', id_producto, id_peluqueria, cantidad);
+    try {
+      await axios.put(`http://localhost:3000/api/productos/${id_producto}/peluquerias/${id_peluqueria}`, { cantidad });
+      const response = await axios.get(`http://localhost:3000/api/peluquerias/productos/${local.id_peluqueria}`);
+      setProductos(response.data);
+    } catch (error) {
+      console.error('Error al actualizar stock del producto:', error);
     }
   };
 
@@ -81,7 +100,12 @@ const AdminProductos = () => {
       ) : (
         <div>
           <Buscador onFilterChange={handleFilterChange} onSearchChange={handleSearchChange} />
-          <TablaProductos productos={productosFiltrados} onSave={handleSave} />
+          <TablaProductos
+            productos={productosFiltrados} // Usar productosFiltrados en lugar de productos
+            onSave={handleSaveProducto}
+            onUpdateStock={handleActualizarStock}
+            local={local} // Pasar local como propiedad a TablaProductos
+          />
         </div>
       )}
     </div>

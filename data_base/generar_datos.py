@@ -5,7 +5,7 @@ from fake import FAKER
 
 
 """ATENCION !!!!!
-    hay un error al hacer los apellidos con l;a libreria, 
+    hay un error al hacer los apellidos con la libreria, 
     el apellido O'Whielacronx lleva una ' y desconfigura 
     todo, reemplazar por OWhielacronx en visual estudio."""
 
@@ -25,6 +25,7 @@ archivo = open("datos.sql", "w")
 regiones = ["Los Lagos", "Los Ríos", "La Araucanía", "Biobío", "Ñuble", "Maule", "O´higgins", "Metropolitana", "Valparaíso", "Coquimbo"]
 comunas = ["Puerto Montt", "Osorno","Valdivia", "Mariquina", "Temuco", "Curacautin", "Concepción", "Cabrero", "Chillan", "San Carlo", "Curicó","Linares", "Rancagua", "Pichilemu", "Santiago", "Maipu", "Valparaiso", "Viña del Mar", "Serena", "Coquimbo"]
 
+archivo.write("SET datestyle = 'DMY';\n")
 #REGION
 archivo.write("insert into region(id_region, nombre)\nvalues\n")
 matrizRegion=[]
@@ -283,9 +284,10 @@ print("======Profesion Succesful======")
 #empleado-peluqueria(fecha_inicio, fecha_fin, id_peluqueria, rut_empleado)
 prob = [1,1,1,1,2,2,3]
 matrizEmpleadoPeluqueria = []
-archivo.write("\nINSERT INTO empleado-peluqueria(fecha_inicio, fecha_fin, id_peluqueria, rut_empleado) \nVALUES\n")
+j=0
+archivo.write("\nINSERT INTO \"empleado-peluqueria\"(fecha_inicio, fecha_fin, id_peluqueria, rut_empleado) \nVALUES\n")
 for i in range(len(matrizEmpleado)):
-    rut = matrizEmpleado[i]
+    rut_empleado = matrizEmpleado[i][0]
     if(i > (j*5)-1):
         j = j + 1
     id_peluqueria = j
@@ -297,15 +299,16 @@ for i in range(len(matrizEmpleado)):
     fecha= str(dia)+'-'+str(mes)+'-'+str(año)
     matrizEmpleadoPeluqueria.append([fecha,None,id_peluqueria,rut_empleado])
     if i == len(matrizEmpleado)-1:
-        archivo.write(f"\t('{fecha}', , {id_peluqueria}, {rut_empleado});\n")
+        archivo.write(f"\t('{fecha}',null , {id_peluqueria}, {rut_empleado});\n")
     else:
-        archivo.write(f"\t('{fecha}', , {id_peluqueria}, {rut_empleado}),\n")
+        archivo.write(f"\t('{fecha}',null , {id_peluqueria}, {rut_empleado}),\n")
 print("======Empleado-Peluqueria Succesful======")
+
 
 #pago(id_pago, fecha,monto, rut_empleado)
 matrizPago = []
 id_pago=1
-archivo.write("\nINSERT INTO pago(id_pago, fecha, mont, rut_empleado) \nVALUES\n")
+archivo.write("\nINSERT INTO pago(id_pago, fecha, monto, rut_empleado) \nVALUES\n")
 
 for i in range(len(matrizEmpleado)):
     rut_empleado = matrizEmpleado[i][0]
@@ -334,7 +337,7 @@ for i in range(len(matrizEmpleado)):
 print("======Pago Succesful======")
 
 #profesion-servicio(id_servicio, id_profesion)
-archivo.write("\nINSERT INTO profesion-servicio(id_servicio, id_profesion) \nVALUES\n")
+archivo.write("\nINSERT INTO \"profesion-servicio\"(id_servicio, id_profesion) \nVALUES\n")
 matrizProfesionServicio = []
 for i in range(len(matrizProfesion)):
     id_profesion= matrizProfesion[i][0]
@@ -345,7 +348,7 @@ for i in range(len(matrizProfesion)):
         for j in servicios:
             id_servicio= j[0]
             matrizProfesionServicio.append([id_servicio,id_profesion])
-            if i == len(matrizProfesion)-1 and not(peluquero) and j == servicios[len(servicios)-1]:
+            if i == len(matrizProfesion)-1 and not(manicurista) and j == servicios[len(servicios)-1]:
                 archivo.write(f"\t({id_servicio}, {id_profesion});\n")
             else:
                 archivo.write(f"\t({id_servicio}, {id_profesion}),\n")
@@ -362,7 +365,7 @@ for i in range(len(matrizProfesion)):
 print("======Profesion-Servicio Succesful======")
 
 #producto-peluqueria(cant, id_peluqueria, id_producto)
-archivo.write("\nINSERT INTO producto-peluqueria(cant, id_peluquiera, id_producto) \nVALUES\n")
+archivo.write("\nINSERT INTO \"producto-peluqueria\"(cant, id_peluqueria, id_producto) \nVALUES\n")
 matrizProductoPeluqueria =[]
 for i in range(len(matrizPeluqueria)):
     id_peluqueria = matrizPeluqueria[i][0]
@@ -377,6 +380,128 @@ for i in range(len(matrizPeluqueria)):
             archivo.write(f"\t({cant}, {id_peluqueria}, {id_producto}),\n")
 print("======Producto-Peluqueria Succesful======")
 
+#boleta_venta(id_boleta_venta,Fecha,rut_cliente)
+archivo.write("\nINSERT INTO \"boleta_venta\"(id_boleta_venta, fecha, rut_cliente) \nVALUES\n")
+matrizBoletaVenta=[]
+clientes = rd.sample(matrizCliente, rd.randint(1500,3000))
+id_boleta_venta = 1
+for i in clientes:
+    rut_cliente = i[0]
+    cantBol=rd.randint(1,40)
+    for j in range(cantBol):
+        mes = rd.randint(1,12)
+        if (mes<10):
+            mes = '0'+str(mes)
+        dia = rd.randint(1,28)
+        if (dia<10):
+            dia = '0'+str(dia)
+        fecha = str(dia)+'-'+str(mes)+'-'+str(rd.randint(2020,2023))
+        id_boleta_venta += 1
+        matrizBoletaVenta.append([id_boleta_venta,fecha,rut_cliente])
+        if i == matrizCliente[len(matrizCliente)-1] and j == cantBol-1:
+            archivo.write(f"\t({id_boleta_venta}, '{fecha}', {rut_cliente});\n")
+        else:
+            archivo.write(f"\t({id_boleta_venta}, '{fecha}', {rut_cliente}),\n")
+print("======Boleta_Venta Succesful======")
+
+
+#detalles(cantidad, id_producto, id_boleta_venta)
+archivo.write("\nINSERT INTO detalle(cantidad,id_producto, id_boleta_venta) \nVALUES\n")
+matrizDetalle = []
+for i in matrizBoletaVenta:
+    id_boleta_venta = i[0]
+    productos = rd.sample(matrizProducto,rd.randint(1,15))
+    for j in productos:
+        id_producto = j[0]
+        cantidad= rd.randint(1,13)
+        matrizDetalle.append([cantidad,fecha,rut_cliente])
+        if i == matrizBoletaVenta[len(matrizBoletaVenta)-1] and j == productos[len(productos)-1]:
+            archivo.write(f"\t({cantidad}, {id_producto}, {id_boleta_venta});\n")
+        else:
+            archivo.write(f"\t({cantidad}, {id_producto}, {id_boleta_venta}),\n")
+print("======Detalle Succesful======")
+
+
+#cita(id_cita, rut_cliente, id_boleta_cita, id_servicio,fecha,id_profesion)
+archivo.write("\nINSERT INTO \"cita\" (id_cita,rut_cliente, id_boleta_cita, id_servicio, fecha, id_profesion) \nVALUES\n")
+matrizCita = []
+matrizBoletaCita = []
+ids =[]
+id_cita = 1
+id_boleta_cita =1
+for i in matrizProfesion:
+    cantCi = rd.randint(10,50)
+    id_profesion = i[0]
+    for j in range(cantCi):
+        if i[1] and i[2]:
+            id_servicio = rd.randint(1,len(matrizServicio))
+        else:
+            if[1]:
+                id_servicio = rd.randint(1,18)
+            else:
+                id_servicio = rd.randint(19,25)
+        rut_cliente = rd.choice(matrizCliente)[0]
+        mes = rd.randint(1,12)
+        if (mes<10):
+            mes = '0'+str(mes)
+        dia = rd.randint(1,28)
+        if (dia<10):
+            dia = '0'+str(dia)
+        fecha = str(dia)+'-'+str(mes)+'-'+str(rd.randint(2020,2023))
+        id = fecha + ":" + str(id_profesion)
+        while (id in ids):
+            mes = rd.randint(1,12)
+            if (mes<10):
+                mes = '0'+str(mes)
+            dia = rd.randint(1,28)
+            if (dia<10):
+                dia = '0'+str(dia)
+            fecha = str(dia)+'-'+str(mes)+'-'+str(rd.randint(2020,2023))
+            id = fecha + ":" + str(id_profesion)
+        ids.append(id)
+        matrizCita.append([id_cita, rut_cliente, id_boleta_cita, id_servicio, fecha, id_profesion])
+        matrizBoletaCita.append([id_boleta_cita,rut_cliente,matrizServicio[id_servicio-1][2]])
+        if i == matrizProfesion[len(matrizProfesion)-1] and j == cantCi-1:
+            archivo.write(f"\t({id_cita}, {rut_cliente}, {id_boleta_cita}, {id_servicio}, {fecha}, {id_profesion});\n")
+        else:
+            archivo.write(f"\t({id_cita}, {rut_cliente}, {id_boleta_cita}, {id_servicio}, {fecha}, {id_profesion}),\n")
+        id_cita += 1
+        id_boleta_cita += 1
+print("======Cita Succesful======")
+
+
+#boleta_cita(id_boleta_cita, rut_cliente, monto)
+archivo.write("\nINSERT INTO \"boleta_cita\" (id_boleta_cita,rut_cliente, monto) \nVALUES\n")
+for i in matrizBoletaCita:
+    if i == matrizBoletaCita[len(matrizBoletaCita)-1]:
+        archivo.write(f"\t({i[0]}, '{i[1]}',{i[2]});\n")
+    else:
+        archivo.write(f"\t({i[0]}, '{i[1]}',{i[2]}),\n")
+
+print("======BoletaCita Succesful======")
+
+
+    
+        
+        
+        
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -389,10 +514,3 @@ print("======Producto-Peluqueria Succesful======")
 
 
 ##tablas restantes
-#detalles(cantidad, id_producto, id_boleta_venta)
-#boleta_venta(id_boleta_venta,Fecha)
-#boleta_cita(id_boleta_cita, nombre, apellido, telefono, monto)
-#cita(id_cita, rut_cliente, id_boleta_cita, id_servicio,fecha,id_profesion)
-#hora-servicio(fecha, id_servicio)
-
-

@@ -1,1 +1,2 @@
-select * from empleado;
+-- Obtener todos los productos por peluqueria
+

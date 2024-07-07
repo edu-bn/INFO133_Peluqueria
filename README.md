@@ -10,7 +10,7 @@ npm install
 
 Luego para iniciar la pagina se debe ubicar en la carpeta app y ejecutar el siguiente comando:
 ```bash
-npm run start
+npm start
 ```
 
 

@@ -27,7 +27,7 @@ const SeleccionarRegion = ({ setRegionSeleccionada }) => {
   return (
     <div>
       <FormControl>
-        <FormLabel>Seleccionar Region</FormLabel>
+        <FormLabel>1. Seleccionar Region</FormLabel>
         <Select placeholder="Seleccione una opción" onChange={handleChange}>
           {regiones.map((region) => (
             <option key={region.id_region} value={region.id_region}>

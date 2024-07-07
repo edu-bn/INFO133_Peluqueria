@@ -79,13 +79,10 @@ const Home = () => {
       </Alert>}
       <div className='middle-container'>
         <FormControl isRequired paddingBottom={'20px'}>
-          <FormLabel>Ingrese RUT del cliente sin digito verificador </FormLabel>
+          <FormLabel>4. Ingrese RUT del cliente sin digito verificador </FormLabel>
           <Input placeholder='11111111'/>
         </FormControl>
-        <Button colorScheme="teal" onClick={handleConfirmarRegistro} size='lg'>
-          Modal
-        </Button>
-        <Button colorScheme="teal" size='lg'>
+        <Button colorScheme="teal" size='lg' onClick={handleConfirmarRegistro}>
           Confirmar
         </Button>
         <RegistroCliente isOpen={isModalOpen} onClose={handleCloseModal}></RegistroCliente>

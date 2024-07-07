@@ -153,6 +153,7 @@ CREATE TABLE public.pago (
 	fecha date NULL,
 	id_pago varchar NOT NULL,
 	rut_empleado int4 NULL,
+	monto int4 NULL,
 	CONSTRAINT pago_pk PRIMARY KEY (id_pago),
 	CONSTRAINT pago_empleado_fk FOREIGN KEY (rut_empleado) REFERENCES public.empleado(rut_empleado)
 );
@@ -204,20 +205,6 @@ CREATE TABLE public.profesion (
 );
 
 
--- public."profesion-hora" definition
-
--- Drop table
-
--- DROP TABLE public."profesion-hora";
-
-CREATE TABLE public."profesion-hora" (
-	id_profesion int4 NULL,
-	fecha timestamp NULL,
-	CONSTRAINT profesion_hora_hora_agendada_fk FOREIGN KEY (fecha) REFERENCES public.hora_agendada(fecha),
-	CONSTRAINT profesion_hora_profesion_fk FOREIGN KEY (id_profesion) REFERENCES public.profesion(id_profesion)
-);
-
-
 -- public."profesion-servicio" definition
 
 -- Drop table
@@ -257,7 +244,7 @@ CREATE TABLE public.cliente (
 
 CREATE TABLE public."empleado-peluqueria" (
 	fecha_inicio date NULL,
-	fecha_fin varchar NULL,
+	fecha_fin date NULL,
 	id_peluqueria int4 NULL,
 	rut_empleado int4 NULL,
 	CONSTRAINT empleado_peluqueria_empleado_fk FOREIGN KEY (rut_empleado) REFERENCES public.empleado(rut_empleado),
@@ -273,12 +260,15 @@ CREATE TABLE public."empleado-peluqueria" (
 
 CREATE TABLE public.cita (
 	id_cita int4 NOT NULL,
-	fecha date NULL,
+	fecha timestamp NULL,
 	rut_cliente int4 NULL,
 	id_boleta_cita int4 NULL,
 	id_servicio int4 NULL,
+	id_profesion int4 NULL,
 	CONSTRAINT cita_pk PRIMARY KEY (id_cita),
 	CONSTRAINT cita_boleta_cita_fk FOREIGN KEY (id_boleta_cita) REFERENCES public.boleta_cita(id_boleta_cita),
 	CONSTRAINT cita_cliente_fk FOREIGN KEY (rut_cliente) REFERENCES public.cliente(rut_cliente),
+	CONSTRAINT cita_hora_agendada_fk FOREIGN KEY (fecha) REFERENCES public.hora_agendada(fecha),
+	CONSTRAINT cita_profesion_fk FOREIGN KEY (id_profesion) REFERENCES public.profesion(id_profesion),
 	CONSTRAINT cita_servicio_fk FOREIGN KEY (id_servicio) REFERENCES public.servicio(id_servicio)
 );

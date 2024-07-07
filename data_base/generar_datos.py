@@ -19,7 +19,7 @@ def Mostrar(matriz):
             print("\t", valor, end=" ")
         print()
 
-archivo = open("data_base/ingresar.sql", "w")
+archivo = open("datos.sql", "w")
 
 #Listas
 regiones = ["Los Lagos", "Los Ríos", "La Araucanía", "Biobío", "Ñuble", "Maule", "O´higgins", "Metropolitana", "Valparaíso", "Coquimbo"]
@@ -39,7 +39,7 @@ for i in range(len(regiones)):
 print("======Region Succesful======")
 
 #COMUNA
-archivo.write("\ninsert into comuna(id_comuna, nombre, fk_region)\nvalues\n")
+archivo.write("\ninsert into comuna(id_comuna, nombre, id_region)\nvalues\n")
 matrizComuna = []
 j = 1
 for i in range(len(comunas)):
@@ -59,28 +59,28 @@ matrizServicio = [
     [1, 'Corte de Cabello Hombre', 15000, 1],
     [2, 'Corte de Cabello Mujer', 20000, 2],
     [3, 'Tinte para Cabello', 35000, 4],
-    [4, 'Manicure', 12000, 1],
-    [5, 'Pedicure', 15000, 2],
-    [6, 'Peinado', 25000, 2],
-    [7, 'Mascarilla Capilar', 8000, 1],
-    [8, 'Alisado Permanente', 50000, 6],
-    [9, 'Depilacion de Cejas', 7000, 1],
-    [10, 'Masaje Capilar', 10000, 1],
-    [11, 'Lavado de Cabello', 5000, 1],
-    [12, 'Secado de Cabello', 8000, 1],
-    [13, 'Moldeado de Cabello', 15000, 2],
-    [14, 'Tratamiento Anticaida', 30000, 3],
-    [15, 'Extensiones de Cabello', 60000, 8],
-    [16, 'Peinado de Novia', 40000, 3],
-    [17, 'Peinado de Fiesta', 35000, 3],
-    [18, 'Corte de Puntas', 8000, 1],
-    [19, 'Brushing', 10000, 1],
-    [20, 'Maquillaje', 20000, 2],
-    [21, 'Manicure con Esmalte Semipermanente', 18000, 2],
-    [22, 'Pedicure con Esmalte Semipermanente', 20000, 2],
-    [23, 'Bano de Crema', 12000, 1],
-    [24, 'Tinte de Cejas', 10000, 1],
-    [25, 'Botox Capilar', 45000, 4]
+    [4, 'Peinado', 25000, 2],
+    [5, 'Mascarilla Capilar', 8000, 1],
+    [6, 'Alisado Permanente', 50000, 6],
+    [7, 'Depilacion de Cejas', 7000, 1],
+    [8, 'Masaje Capilar', 10000, 1],
+    [9, 'Lavado de Cabello', 5000, 1],
+    [10, 'Secado de Cabello', 8000, 1],
+    [11, 'Moldeado de Cabello', 15000, 2],
+    [12, 'Tratamiento Anticaida', 30000, 3],
+    [13, 'Extensiones de Cabello', 60000, 8],
+    [14, 'Peinado de Novia', 40000, 3],
+    [15, 'Peinado de Fiesta', 35000, 3],
+    [16, 'Corte de Puntas', 8000, 1],
+    [17, 'Brushing', 10000, 1],
+    [18, 'Botox Capilar', 45000, 4],
+    [19, 'Manicure', 12000, 1],
+    [20, 'Pedicure', 15000, 2],
+    [21, 'Maquillaje', 20000, 2],
+    [22, 'Manicure con Esmalte Semipermanente', 18000, 2],
+    [23, 'Pedicure con Esmalte Semipermanente', 20000, 2],
+    [24, 'Bano de Crema', 12000, 1],
+    [25, 'Tinte de Cejas', 10000, 1]
 ]
 archivo.write("\nINSERT INTO servicio (id_servicio, nombre, costo, duracion) \nVALUES\n")
 for i in matrizServicio:
@@ -155,34 +155,14 @@ for i in matrizProducto:
 print("======Producto Succesful======")
 
 
-#empleado(rut_empleado,nombre, apellido, telefono, id_comuna)
-archivo.write("\ninsert into empleado(rut_empleado, nombre, apellido, telefono, id_comuna)\nvalues\n")
-matrizEmpleado = []
-j=1
-for i in range(100):
-    rut_empleado = rd.randint(15000000,22000000)
-    nombre = FAKER.first_name()
-    apellido = FAKER.last_name()
-    telefono='9'+str(rd.randint(12837498, 92736157))
-    if(i > (j*5)-1):
-        j = j + 1
-    id_comuna = j
-
-    matrizEmpleado.append([rut_empleado, nombre, apellido, id_comuna])
-    if i == 99:
-        archivo.write(f"\t({rut_empleado}, '{nombre}', '{apellido}', '{telefono}', {id_comuna});\n")
-    else:
-        archivo.write(f"\t({rut_empleado}, '{nombre}', '{apellido}', '{telefono}', {id_comuna}),\n")
-
-print("======Empleado Succesful======")
-
 #cliente(rut_cliente,nombre, apellido, telefono, id_comuna)
 
 archivo.write("\ninsert into cliente(rut_cliente, nombre, apellido, telefono, id_comuna)\nvalues\n")
 matrizCliente = []
 j=1
+rut_cliente = 13000000
 for i in range(3000):
-    rut_cliente = rd.randint(13000000,25000000)
+    rut_cliente = rut_cliente + rd.randint(0,200000)
     nombre = FAKER.first_name()
     apellido = FAKER.last_name()
     telefono = 900000000+rd.randint(12837498, 92736157)
@@ -249,8 +229,31 @@ for i in matrizPeluqueria:
 
 print("======Peluqueria Succesful======")
 
+
+#empleado(rut_empleado,nombre, apellido, telefono, id_comuna)
+archivo.write("\ninsert into empleado(rut_empleado, nombre, apellido, telefono, id_comuna)\nvalues\n")
+matrizEmpleado = []
+j=1
+rut_empleado = 12000000
+for i in range(100):
+    rut_empleado = rut_empleado + rd.randint(0,150000)
+    nombre = FAKER.first_name()
+    apellido = FAKER.last_name()
+    telefono=900000000+rd.randint(12837498, 92736157)
+    if(i > (j*5)-1):
+        j = j + 1
+    id_comuna = matrizPeluqueria[j-1][2]
+
+    matrizEmpleado.append([rut_empleado, nombre, apellido, id_comuna])
+    if i == 99:
+        archivo.write(f"\t({rut_empleado}, '{nombre}', '{apellido}', '{telefono}', {id_comuna});\n")
+    else:
+        archivo.write(f"\t({rut_empleado}, '{nombre}', '{apellido}', '{telefono}', {id_comuna}),\n")
+
+print("======Empleado Succesful======")
+
 #profesion(id_profesion, peluquero, manicurista, rut_empleado)
-MatrizProfesion=[]
+matrizProfesion=[]
 prob =[1,1,2,2,3]
 j=1
 archivo.write("\nINSERT INTO profesion(id_profesion, peluquero, manicurista, rut_empleado) \nVALUES\n")
@@ -269,10 +272,127 @@ for i in matrizEmpleado:
         peluquero = True
         manicurista = True
 
-    MatrizProfesion.append([id_profesion, peluquero, manicurista, rut_empleado])
-    if i == len(MatrizProfesion)-1:
+    matrizProfesion.append([id_profesion, peluquero, manicurista, rut_empleado])
+    if i == matrizEmpleado[len(matrizEmpleado)-1]:
         archivo.write(f"\t({id_profesion}, {peluquero}, {manicurista}, {rut_empleado});\n")
     else:
         archivo.write(f"\t({id_profesion}, {peluquero}, {manicurista}, {rut_empleado}),\n")
 
 print("======Profesion Succesful======")
+
+#empleado-peluqueria(fecha_inicio, fecha_fin, id_peluqueria, rut_empleado)
+prob = [1,1,1,1,2,2,3]
+matrizEmpleadoPeluqueria = []
+archivo.write("\nINSERT INTO empleado-peluqueria(fecha_inicio, fecha_fin, id_peluqueria, rut_empleado) \nVALUES\n")
+for i in range(len(matrizEmpleado)):
+    rut = matrizEmpleado[i]
+    if(i > (j*5)-1):
+        j = j + 1
+    id_peluqueria = j
+    dia= rd.randint(10,28)
+    mes = rd.randint(1,12)
+    if (mes<10):
+        mes = '0'+str(mes)
+    año = rd.choice([2020,2021,2022,2023])
+    fecha= str(dia)+'-'+str(mes)+'-'+str(año)
+    matrizEmpleadoPeluqueria.append([fecha,None,id_peluqueria,rut_empleado])
+    if i == len(matrizEmpleado)-1:
+        archivo.write(f"\t('{fecha}', , {id_peluqueria}, {rut_empleado});\n")
+    else:
+        archivo.write(f"\t('{fecha}', , {id_peluqueria}, {rut_empleado}),\n")
+print("======Empleado-Peluqueria Succesful======")
+
+#pago(id_pago, fecha,monto, rut_empleado)
+matrizPago = []
+id_pago=1
+archivo.write("\nINSERT INTO pago(id_pago, fecha, mont, rut_empleado) \nVALUES\n")
+
+for i in range(len(matrizEmpleado)):
+    rut_empleado = matrizEmpleado[i][0]
+    mes = int(matrizEmpleadoPeluqueria[i][0][3:5])
+    año = int(matrizEmpleadoPeluqueria[i][0][6:10])
+    while(año<=2024):
+        mes=1
+        if año == 2024:
+            mesFinal=6
+        else:
+            mesFinal = 12
+        while(mes<=mesFinal):
+            if mes<10:
+                fecha= '20-0'+str(mes)+'-'+str(año)
+            else:
+                fecha= '20-'+str(mes)+'-'+str(año)
+            monto= rd.randint(200,1000)*100
+            matrizPago.append([id,fecha,monto,rut_empleado])
+            if i == len(matrizEmpleado)-1 and fecha =='20-06-2024':
+                archivo.write(f"\t({id_pago},'{fecha}' , {monto}, {rut_empleado});\n")
+            else:
+                archivo.write(f"\t({id_pago},'{fecha}' , {monto}, {rut_empleado}),\n")
+            id_pago+=1
+            mes+=1
+        año+=1
+print("======Pago Succesful======")
+
+#profesion-servicio(id_servicio, id_profesion)
+archivo.write("\nINSERT INTO profesion-servicio(id_servicio, id_profesion) \nVALUES\n")
+matrizProfesionServicio = []
+for i in range(len(matrizProfesion)):
+    id_profesion= matrizProfesion[i][0]
+    peluquero = matrizProfesion[i][1]
+    manicurista = matrizProfesion[i][2]
+    if peluquero:
+        servicios = rd.sample(matrizServicio[:18], rd.randint(1,18))
+        for j in servicios:
+            id_servicio= j[0]
+            matrizProfesionServicio.append([id_servicio,id_profesion])
+            if i == len(matrizProfesion)-1 and not(peluquero) and j == servicios[len(servicios)-1]:
+                archivo.write(f"\t({id_servicio}, {id_profesion});\n")
+            else:
+                archivo.write(f"\t({id_servicio}, {id_profesion}),\n")
+            id_pago+=1
+    if manicurista:
+        servicios = rd.sample(matrizServicio[18:25], rd.randint(1,7))
+        for j in servicios:
+            id_servicio= j[0]
+            matrizProfesionServicio.append([id_servicio,id_profesion])
+            if i == len(matrizProfesion)-1 and j == servicios[len(servicios)-1]:
+                archivo.write(f"\t({id_servicio}, {id_profesion});\n")
+            else:
+                archivo.write(f"\t({id_servicio}, {id_profesion}),\n")
+print("======Profesion-Servicio Succesful======")
+
+#producto-peluqueria(cant, id_peluqueria, id_producto)
+archivo.write("\nINSERT INTO producto-peluqueria(cant, id_peluquiera, id_producto) \nVALUES\n")
+matrizProductoPeluqueria =[]
+for i in range(len(matrizPeluqueria)):
+    id_peluqueria = matrizPeluqueria[i][0]
+    productos = rd.sample(matrizProducto, rd.randint(20,50))
+    for j in productos:
+        id_producto= j[0]
+        cant= rd.randint(20, 100)
+        matrizProductoPeluqueria.append([cant,id_peluqueria,id_producto])
+        if i == len(matrizPeluqueria)-1 and j == productos[len(productos)-1]:
+            archivo.write(f"\t({cant}, {id_peluqueria}, {id_producto});\n")
+        else:
+            archivo.write(f"\t({cant}, {id_peluqueria}, {id_producto}),\n")
+print("======Producto-Peluqueria Succesful======")
+
+
+
+
+
+
+    
+
+
+
+
+
+##tablas restantes
+#detalles(cantidad, id_producto, id_boleta_venta)
+#boleta_venta(id_boleta_venta,Fecha)
+#boleta_cita(id_boleta_cita, nombre, apellido, telefono, monto)
+#cita(id_cita, rut_cliente, id_boleta_cita, id_servicio,fecha,id_profesion)
+#hora-servicio(fecha, id_servicio)
+
+

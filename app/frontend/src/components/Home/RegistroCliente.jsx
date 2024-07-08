@@ -9,7 +9,7 @@ import {
 import { Input } from '@chakra-ui/react';
 
 
-const RegistroCliente = ({ isOpen, onClose, rutDefault }) => {
+const RegistroCliente = ({ isOpen, onClose, rutDefault, onConfirmar }) => {
   const [clientes, setClientes] = useState([]);
   const [comunas, setComunas] = useState([]);
   const [rut, setRut] = useState(rutDefault);
@@ -105,7 +105,7 @@ const RegistroCliente = ({ isOpen, onClose, rutDefault }) => {
       console.error("Error creando cliente:", error);
     }
 
-    onClose();
+    onConfirmar();
   };
 
 

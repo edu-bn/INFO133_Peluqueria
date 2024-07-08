@@ -85,6 +85,9 @@ const Home = () => {
 
   const handleRegistro = () => {
     setShowRegistroCliente(false);
+  }
+
+  const handleRegistroConfirmado = () => {
     navigateTo(navegar, { state: { local: localSeleccionado, rut: rutCliente } });
   }
 
@@ -144,7 +147,7 @@ const Home = () => {
       <div className='down-bar' />
       {/* Renderizar RegistroCliente si el rut no está en la base de datos */}
       {showRegistroCliente && (
-        <RegistroCliente isOpen={isModalOpen} onClose={handleRegistro} rutDefault={rutCliente} />
+        <RegistroCliente isOpen={isModalOpen} onClose={handleRegistro} rutDefault={rutCliente} onConfirmar={handleRegistroConfirmado} />
       )}
     </>
   );

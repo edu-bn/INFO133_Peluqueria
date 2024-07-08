@@ -13,7 +13,15 @@ const getClienteByRut = async (rut) => {
     return rows[0];
 }
 
+const addCliente = async (rut, nombre, apellido, telefono, id_comuna) => {
+    const query = 'INSERT INTO cliente (rut_cliente, nombre, apellido, telefono, id_comuna) VALUES ($1, $2, $3, $4, $5) RETURNING *';
+    const values = [rut, nombre, apellido, telefono, id_comuna];
+    const { rows } = await pool.query(query, values);
+    return rows[0];
+}
+
 module.exports = {
     getAllClientes,
-    getClienteByRut
+    getClienteByRut,
+    addCliente
 };

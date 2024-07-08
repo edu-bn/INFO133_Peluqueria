@@ -39,6 +39,7 @@ const getProductosByPeluqueria = async (idPeluqueria) => {
         JOIN "producto-peluqueria" pp ON p.id_peluqueria = pp.id_peluqueria
         JOIN producto pr ON pp.id_producto = pr.id_producto
         WHERE p.id_peluqueria = $1
+        ORDER BY pr.id_producto
     `;
     const values = [idPeluqueria];
     const { rows } = await pool.query(query, values);

@@ -34,7 +34,7 @@ const SeleccionarLocal = ({ comunaId, regionId, setLocalSeleccionado}) => {
     
   return (
     <div>
-      <FormControl>
+      <FormControl isRequired>
         <FormLabel>3. Seleccionar Local</FormLabel>
         <Select placeholder="Seleccione una opción" onChange={handleChange}>
           {local.map((peluqueria) => (

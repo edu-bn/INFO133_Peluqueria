@@ -1,16 +1,14 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Alert, AlertIcon, AlertTitle, CloseButton, Button, Stack } from '@chakra-ui/react';
-import { Input } from '@chakra-ui/react'
-import {FormControl, FormLabel} from '@chakra-ui/react'
-
+import { Alert, AlertIcon, AlertTitle, CloseButton, Button, Stack, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, FormControl, FormLabel, Input } from '@chakra-ui/react';
+import { FormErrorMessage } from '@chakra-ui/react';
 import Top from '../Top.jsx';
 import SeleccionarRegion from './SeleccionarRegion.jsx';
 import SeleccionarComuna from './SeleccionarComuna.jsx';
 import SeleccionarLocal from './SeleccionarLocal.jsx';
+import axios from 'axios';
 import RegistroCliente from './RegistroCliente.jsx';
 import './Home.css';
-
 
 const Home = () => {
   const navigateTo = useNavigate();
@@ -19,50 +17,83 @@ const Home = () => {
   const [comunaSeleccionada, setComunaSeleccionada] = useState(null);
   const [alertaVisible, setAlertaVisible] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [rutCliente, setRutCliente] = useState('');
+  const [rutInvalido, setRutInvalido] = useState(false);
+  const [isRutOnDatabase, setIsRutOnDatabase] = useState(false);
+  const [showRegistroCliente, setShowRegistroCliente] = useState(false);
+  const [navegar, setNavegar] = useState('');
 
   const handleClickReserva = () => {
-    if(localSeleccionado){
-      navigateTo('/reserva', { state: {local: localSeleccionado } });
+    setNavegar('/reserva');
+    if (localSeleccionado) {
+      setIsModalOpen(true);
     } else {
       setAlertaVisible(true);
     }
   };
 
-  const handleClickProductos= () => {
-    if(localSeleccionado){
-      navigateTo('/productos', { state: {local: localSeleccionado } });
+  const handleClickProductos = () => {
+    setNavegar('/productos');
+    if (localSeleccionado) {
+      setIsModalOpen(true);
     } else {
       setAlertaVisible(true);
-    }    
+    }
+    if (isRutOnDatabase){
+      navigateTo('/productos', { state: { local: localSeleccionado, rut: rutCliente } });
+    }
   };
 
   const handleClickAdmin = () => {
-    if(localSeleccionado){
-      navigateTo('/admin', { state: {local: localSeleccionado } });
-    } else {
-      setAlertaVisible(true);
+    if (localSeleccionado) {
+      navigateTo('/admin', { state: { local: localSeleccionado } });
     }
-  }
+  };
 
   const handleCloseAlerta = () => {
-    console.log('en handleCloseAlerta');
     setAlertaVisible(false);
-  }
+  };
 
   const handleConfirmarRegistro = () => {
-    setIsModalOpen(true);
+    
+    if (rutCliente.length < 7 || rutCliente.length > 9 || isNaN(parseInt(rutCliente, 10))){
+      setRutInvalido(true)
+      console.log('Rut inválido');
+      return;
+    }
+    handleVerificarCliente(rutCliente);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleVerificarCliente = async (rut) => {
+    try {
+      const response = await axios.get(`http://localhost:3000/api/clientes/${rut}`);
+      const cliente = response.data;
+      console.log(cliente);
+      if (Object.keys(cliente).length === 0){
+        console.log('cliente no encontrado');
+        setIsRutOnDatabase(false);
+        setShowRegistroCliente(true);
+      } else {
+        console.log('cliente encontrado', cliente);
+        setIsRutOnDatabase(true);
+        navigateTo(navegar, { state: { local: localSeleccionado, rut: rutCliente } });
+      }
+    } catch (error) {
+      console.error('Error al verificar cliente:', error);
+    }
   };
+
+  const handleRegistro = () => {
+    setShowRegistroCliente(false);
+    navigateTo(navegar, { state: { local: localSeleccionado, rut: rutCliente } });
+  }
 
   return (
     <>
-      <Top text={'peluqueria'}/>  
+      <Top text={'Peluquería'} />
       <div className='horizontal-container'>
-        <SeleccionarRegion setRegionSeleccionada={setRegionSeleccionada}/>
-        <SeleccionarComuna 
+        <SeleccionarRegion setRegionSeleccionada={setRegionSeleccionada} />
+        <SeleccionarComuna
           regionId={regionSeleccionada ? regionSeleccionada.id_region : null}
           setComunaSeleccionada={setComunaSeleccionada}
         />
@@ -78,14 +109,24 @@ const Home = () => {
         <CloseButton position="absolute" right="8px" top="8px" onClick={handleCloseAlerta} />
       </Alert>}
       <div className='middle-container'>
-        <FormControl isRequired paddingBottom={'20px'}>
-          <FormLabel>4. Ingrese RUT del cliente sin digito verificador </FormLabel>
-          <Input placeholder='11111111'/>
-        </FormControl>
-        <Button colorScheme="teal" size='lg' onClick={handleConfirmarRegistro}>
-          Confirmar
-        </Button>
-        <RegistroCliente isOpen={isModalOpen} onClose={handleCloseModal}></RegistroCliente>
+        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Confirmar Cliente</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <FormControl isRequired paddingBottom={'20px'} isInvalid={rutInvalido}>
+                <FormLabel>Ingrese RUT del cliente sin dígito verificador</FormLabel>
+                <Input placeholder='11111111' value={rutCliente} onChange={(e) => setRutCliente(e.target.value)} isInvalid={rutInvalido}/>
+                {rutInvalido && <FormErrorMessage>Rut invalido.</FormErrorMessage>}
+              </FormControl>
+            </ModalBody>
+            <ModalFooter>
+              <Button colorScheme="teal" onClick={handleConfirmarRegistro}>Continuar</Button>
+              <Button colorScheme="red" ml={3} onClick={() => setIsModalOpen(false)}>Cancelar</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       </div>
       <div className='button-container'>
         <Stack direction='row' spacing={200} align='center' justify='space-between'>
@@ -101,6 +142,10 @@ const Home = () => {
         </Stack>
       </div>
       <div className='down-bar' />
+      {/* Renderizar RegistroCliente si el rut no está en la base de datos */}
+      {showRegistroCliente && (
+        <RegistroCliente isOpen={isModalOpen} onClose={handleRegistro} rutDefault={rutCliente} />
+      )}
     </>
   );
 };

@@ -12,7 +12,13 @@ const Reserva = () => {
   const navigateTo = useNavigate();
   const location = useLocation();
   const { local } = location.state || {};
-  const showAlert = !local;
+  const { rut } = location.state || {};
+  console.log(local, rut);
+  let showAlert = false;
+  if (!local && !rut) {
+    showAlert = true;
+  }
+  
   const [profesionalSeleccionado, setProfesionalSeleccionado] = useState(null);
 
 
@@ -26,7 +32,7 @@ const Reserva = () => {
     {showAlert ? (
       <Alert status="error" variant="subtle" mt={4}>
       <AlertIcon />
-      <AlertTitle>Por favor selecciona un local antes de continuar.</AlertTitle>
+      <AlertTitle>Por favor selecciona un local e ingrese un cliente antes de continuar.</AlertTitle>
       <Button onClick={handleReturnHome} colorScheme="teal" mt={4} size="md">
         Volver a la página principal
       </Button>

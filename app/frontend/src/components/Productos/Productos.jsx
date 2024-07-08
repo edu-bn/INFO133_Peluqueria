@@ -14,7 +14,14 @@ const Productos = () => {
   const navigateTo = useNavigate();
   const location = useLocation();
   const { local } = location.state || {};
-  const showAlert = !location.state;
+  const { rut } = location.state || {};
+  console.log(local, rut);
+  let showAlert = false;
+  if (!local && !rut) {
+    console.log('No se ha seleccionado un local');
+    showAlert = true;
+  }
+  
 
   const handleReturnHome = () => {
     navigateTo("/");
@@ -78,7 +85,9 @@ const Productos = () => {
       {showAlert ? (    
       <Alert status="error" variant="subtle" mt={4}>
       <AlertIcon />
-      <AlertTitle>Por favor selecciona un local antes de continuar.</AlertTitle>
+      <AlertTitle>
+        Por favor selecciona un local e ingrese el cliente antes de continuar.
+      </AlertTitle>
       <Button onClick={handleReturnHome} colorScheme="teal" mt={4} size="md">
         Volver a la página principal
       </Button>

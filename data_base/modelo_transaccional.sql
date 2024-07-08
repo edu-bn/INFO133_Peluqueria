@@ -1,44 +1,3 @@
--- public.boleta_cita definition
-
--- Drop table
-
--- DROP TABLE public.boleta_cita;
-
-CREATE TABLE public.boleta_cita (
-	id_boleta_cita int4 NOT NULL,
-	nombre varchar NULL,
-	apellido varchar NULL,
-	telefono int4 NULL,
-	monto int4 NULL,
-	CONSTRAINT boleta_pk PRIMARY KEY (id_boleta_cita)
-);
-
-
--- public.boleta_venta definition
-
--- Drop table
-
--- DROP TABLE public.boleta_venta;
-
-CREATE TABLE public.boleta_venta (
-	id_boleta_venta int4 NOT NULL,
-	fecha date NULL,
-	CONSTRAINT boleta_venta_pk PRIMARY KEY (id_boleta_venta)
-);
-
-
--- public.hora_agendada definition
-
--- Drop table
-
--- DROP TABLE public.hora_agendada;
-
-CREATE TABLE public.hora_agendada (
-	fecha timestamp NOT NULL,
-	CONSTRAINT hora_agendada_pk PRIMARY KEY (fecha)
-);
-
-
 -- public.producto definition
 
 -- Drop table
@@ -77,6 +36,7 @@ CREATE TABLE public.servicio (
 	nombre varchar NULL,
 	costo int4 NULL,
 	duracion int4 NULL,
+	especialidad varchar NULL,
 	CONSTRAINT servicio_pk PRIMARY KEY (id_servicio)
 );
 
@@ -96,21 +56,6 @@ CREATE TABLE public.comuna (
 );
 
 
--- public.detalle definition
-
--- Drop table
-
--- DROP TABLE public.detalle;
-
-CREATE TABLE public.detalle (
-	cantidad int4 NULL,
-	id_producto int4 NULL,
-	id_boleta_venta int4 NULL,
-	CONSTRAINT detalle_boleta_venta_fk FOREIGN KEY (id_boleta_venta) REFERENCES public.boleta_venta(id_boleta_venta),
-	CONSTRAINT detalle_producto_fk FOREIGN KEY (id_producto) REFERENCES public.producto(id_producto)
-);
-
-
 -- public.empleado definition
 
 -- Drop table
@@ -126,20 +71,6 @@ CREATE TABLE public.empleado (
 	rut_empleado int4 NOT NULL,
 	CONSTRAINT empleado_pk PRIMARY KEY (rut_empleado),
 	CONSTRAINT empleado_comuna_fk FOREIGN KEY (id_comuna) REFERENCES public.comuna(id_comuna)
-);
-
-
--- public."hora-servicio" definition
-
--- Drop table
-
--- DROP TABLE public."hora-servicio";
-
-CREATE TABLE public."hora-servicio" (
-	fecha timestamp NULL,
-	id_servicio int4 NULL,
-	CONSTRAINT hora_servicio_hora_agendada_fk FOREIGN KEY (fecha) REFERENCES public.hora_agendada(fecha),
-	CONSTRAINT hora_servicio_servicio_fk FOREIGN KEY (id_servicio) REFERENCES public.servicio(id_servicio)
 );
 
 
@@ -252,6 +183,37 @@ CREATE TABLE public."empleado-peluqueria" (
 );
 
 
+-- public.boleta_cita definition
+
+-- Drop table
+
+-- DROP TABLE public.boleta_cita;
+
+CREATE TABLE public.boleta_cita (
+	id_boleta_cita int4 NOT NULL,
+	monto int4 NULL,
+	rut_cliente int4 NULL,
+	CONSTRAINT boleta_pk PRIMARY KEY (id_boleta_cita),
+	CONSTRAINT boleta_cita_cliente_fk FOREIGN KEY (rut_cliente) REFERENCES public.cliente(rut_cliente)
+);
+
+
+-- public.boleta_venta definition
+
+-- Drop table
+
+-- DROP TABLE public.boleta_venta;
+
+CREATE TABLE public.boleta_venta (
+	id_boleta_venta int4 NOT NULL,
+	fecha date NULL,
+	rut_cliente int4 NULL,
+	monto int4 NULL,
+	CONSTRAINT boleta_venta_pk PRIMARY KEY (id_boleta_venta),
+	CONSTRAINT boleta_venta_cliente_fk FOREIGN KEY (rut_cliente) REFERENCES public.cliente(rut_cliente)
+);
+
+
 -- public.cita definition
 
 -- Drop table
@@ -265,10 +227,28 @@ CREATE TABLE public.cita (
 	id_boleta_cita int4 NULL,
 	id_servicio int4 NULL,
 	id_profesion int4 NULL,
+	fechaprofesion varchar NOT NULL,
 	CONSTRAINT cita_pk PRIMARY KEY (id_cita),
+	CONSTRAINT cita_unique UNIQUE (fechaprofesion),
 	CONSTRAINT cita_boleta_cita_fk FOREIGN KEY (id_boleta_cita) REFERENCES public.boleta_cita(id_boleta_cita),
 	CONSTRAINT cita_cliente_fk FOREIGN KEY (rut_cliente) REFERENCES public.cliente(rut_cliente),
-	CONSTRAINT cita_hora_agendada_fk FOREIGN KEY (fecha) REFERENCES public.hora_agendada(fecha),
 	CONSTRAINT cita_profesion_fk FOREIGN KEY (id_profesion) REFERENCES public.profesion(id_profesion),
 	CONSTRAINT cita_servicio_fk FOREIGN KEY (id_servicio) REFERENCES public.servicio(id_servicio)
+);
+
+
+-- public.detalle definition
+
+-- Drop table
+
+-- DROP TABLE public.detalle;
+
+CREATE TABLE public.detalle (
+	cantidad int4 NULL,
+	id_producto int4 NULL,
+	id_boleta_venta int4 NULL,
+	id_peluqueria int4 NULL,
+	CONSTRAINT detalle_boleta_venta_fk FOREIGN KEY (id_boleta_venta) REFERENCES public.boleta_venta(id_boleta_venta),
+	CONSTRAINT detalle_peluqueria_fk FOREIGN KEY (id_peluqueria) REFERENCES public.peluqueria(id_peluqueria),
+	CONSTRAINT detalle_producto_fk FOREIGN KEY (id_producto) REFERENCES public.producto(id_producto)
 );

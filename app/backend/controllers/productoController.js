@@ -52,6 +52,18 @@ const actualizarStockProducto = async (req, res) => {
   }
 };
 
+const addProductosToAllPeluquerias = async (req, res) => {
+  console.log(req.params);
+  const { id_producto } = req.params; // Asegúrate de que estás obteniendo id_producto correctamente
+  console.log('en controller addProductosToAllPeluquerias id_producto: ', id_producto);
+  try {
+    const rowCount = await Producto.addProductosToAllPeluquerias(id_producto);
+    res.json({ message: `${rowCount} peluquerías actualizados con el producto ${id_producto}` });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 
 module.exports = {
   getProductos,
@@ -59,4 +71,5 @@ module.exports = {
   crearProducto,
   actualizarProducto,
   actualizarStockProducto,
+  addProductosToAllPeluquerias
 };

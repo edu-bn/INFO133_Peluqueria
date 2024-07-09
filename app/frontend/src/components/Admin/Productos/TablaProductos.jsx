@@ -1,7 +1,7 @@
 import { Table, Thead, Tbody, Tr, Th, Td, TableContainer, Input, Button } from '@chakra-ui/react';
 import { useState } from 'react';
 
-const TablaProductos = ({ productos, onSave, onUpdateStock, local }) => {
+const TablaProductos = ({ productos, onSave, onAddNew }) => {
   const [editIndex, setEditIndex] = useState(null);
   const [editValues, setEditValues] = useState({});
   const [addingNew, setAddingNew] = useState(false);
@@ -28,6 +28,7 @@ const TablaProductos = ({ productos, onSave, onUpdateStock, local }) => {
     setEditValues({});
   };
 
+
   const handleAddNew = () => {
     setAddingNew(true);
   };
@@ -37,8 +38,9 @@ const TablaProductos = ({ productos, onSave, onUpdateStock, local }) => {
     setNewProduct((prevProduct) => ({ ...prevProduct, [name]: value }));
   };
 
+  // manejamos el guardado de un nuevo producto
   const handleSaveNew = () => {
-    onUpdateStock(local.id_producto, local.id_peluqueria, newProduct.cant);
+    onAddNew(newProduct);
     setAddingNew(false);
     setNewProduct({ nombre: '', valor: '', cant: '' });
   };

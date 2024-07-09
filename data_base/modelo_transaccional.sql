@@ -118,6 +118,8 @@ CREATE TABLE public."producto-peluqueria" (
 	CONSTRAINT producto_peluqueria_peluqueria_fk FOREIGN KEY (id_peluqueria) REFERENCES public.peluqueria(id_peluqueria),
 	CONSTRAINT producto_peluqueria_producto_fk FOREIGN KEY (id_producto) REFERENCES public.producto(id_producto)
 );
+ALTER TABLE "producto-peluqueria"
+ADD CONSTRAINT pk_producto_peluqueria PRIMARY KEY (id_peluqueria, id_producto);
 
 
 -- public.profesion definition

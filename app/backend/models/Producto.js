@@ -14,9 +14,17 @@ const getProductoById = async (id) => {
 };
 
 const createProducto = async (nombre, valor) => {
-  const query = 'INSERT INTO producto (nombre, valor) VALUES ($1, $2) RETURNING *';
-  const values = [nombre, valor];
-  const { rows } = await pool.query(query, values);
+  // Obtener el último id_producto
+  const maxIdQuery = 'SELECT MAX(id_producto) as max_id FROM producto';
+  const maxIdResult = await pool.query(maxIdQuery);
+  const maxId = maxIdResult.rows[0].max_id;
+  const newIdProducto = maxId ? maxId + 1 : 1;
+  console.log('Nuevo id_producto:', newIdProducto);
+
+  // Insertar el nuevo producto con el nuevo id
+  const insertQuery = 'INSERT INTO producto (id_producto, nombre, valor) VALUES ($1, $2, $3) RETURNING *';
+  const values = [newIdProducto, nombre, valor];
+  const { rows } = await pool.query(insertQuery, values);
   return rows[0];
 };
 
@@ -38,10 +46,34 @@ const updateStockProducto = async (cantidad, id_producto, id_peluqueria) => {
   return rows[0];
 };
 
+const addProductosToAllPeluquerias = async (idProducto) => {
+  console.log('idProducto:', idProducto);
+  const query = `
+    INSERT INTO "producto-peluqueria" (id_peluqueria, id_producto, cant)
+    SELECT id_peluqueria, $1, 0
+    FROM peluqueria
+    WHERE id_peluqueria NOT IN (
+      SELECT id_peluqueria
+      FROM "producto-peluqueria"
+      WHERE id_producto = $1
+    );
+  `;
+  const values = [idProducto];
+  
+  try {
+    const { rowCount } = await pool.query(query, values);
+    return rowCount;
+  } catch (error) {
+    console.error('Error al agregar producto a todas las peluquerías:', error);
+    throw error;
+  }
+};
+
 module.exports = {
   getAllProductos,
   getProductoById,
   createProducto,
   updateProducto,
   updateStockProducto,
+  addProductosToAllPeluquerias
 };

@@ -59,6 +59,24 @@ const AdminProductos = () => {
     });
   }, [productos, filtro, terminoBusqueda]);
 
+  const handleAddNewProduct = async (producto) => {
+    console.log('Agregar nuevo producto');
+    const { nombre, valor, cant } = producto;
+    console.log('Nuevo producto:', nombre, valor, cant);
+    try {
+      const response = await axios.post('http://localhost:3000/api/productos', { nombre, valor });
+      const { id_producto } = response.data;
+      let aux = id_producto
+      console.log('ID del nuevo producto:', aux);
+      await axios.post(`http://localhost:3000/api/productos/addProductostoAllPeluquerias/${aux}`);
+      await axios.put(`http://localhost:3000/api/productos/${id_producto}/peluquerias/${local.id_peluqueria}`, { cantidad: cant });
+      const newProduct = { id_producto, nombre, valor, cant };
+      setProductos((prevProductos) => [...prevProductos, newProduct]);
+    } catch (error) {
+      console.error('Error al agregar nuevo producto:', error);
+    }
+  }
+
   const handleSaveProducto = async (producto) => {
     console.log('Guardar producto:', producto);
     const { id_producto, nombre, valor, cant } = producto;
@@ -72,17 +90,6 @@ const AdminProductos = () => {
 
     } catch (error) {
       console.error('Error al guardar producto:', error);
-    }
-  };
-
-  const handleActualizarStock = async (id_producto, id_peluqueria, cantidad) => {
-    console.log('Actualizar stock del producto:', id_producto, id_peluqueria, cantidad);
-    try {
-      await axios.put(`http://localhost:3000/api/productos/${id_producto}/peluquerias/${id_peluqueria}`, { cantidad });
-      const response = await axios.get(`http://localhost:3000/api/peluquerias/productos/${local.id_peluqueria}`);
-      setProductos(response.data);
-    } catch (error) {
-      console.error('Error al actualizar stock del producto:', error);
     }
   };
 
@@ -103,8 +110,7 @@ const AdminProductos = () => {
           <TablaProductos
             productos={productosFiltrados} // Usar productosFiltrados en lugar de productos
             onSave={handleSaveProducto}
-            onUpdateStock={handleActualizarStock}
-            local={local} // Pasar local como propiedad a TablaProductos
+            onAddNew={handleAddNewProduct}
           />
         </div>
       )}

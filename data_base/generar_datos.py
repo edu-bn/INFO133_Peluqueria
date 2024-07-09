@@ -156,23 +156,24 @@ for i in matrizProducto:
 print("======Producto Succesful======")
 
 
-#cliente(rut_cliente,nombre, apellido, telefono, id_comuna)
+#cliente(rut_cliente,nombre, apellido, telefono, id_comuna, sexo)
 
-archivo.write("\ninsert into cliente(rut_cliente, nombre, apellido, telefono, id_comuna)\nvalues\n")
+archivo.write("\ninsert into cliente(rut_cliente, nombre, apellido, telefono, id_comuna, sexo)\nvalues\n")
 matrizCliente = []
 j=1
 rut_cliente = 13000000
 for i in range(3000):
-    rut_cliente = rut_cliente + rd.randint(0,7000)
+    rut_cliente = rut_cliente + rd.randint(1,7000)
+    sexo = rd.choice([True,False])
     nombre = FAKER.first_name()
     apellido = FAKER.last_name()
     telefono = 900000000+rd.randint(12837498, 92736157)
     id_comuna = rd.randint(1,20)
-    matrizCliente.append([rut_cliente, nombre, apellido, id_comuna])
+    matrizCliente.append([rut_cliente, nombre, apellido, telefono, id_comuna, sexo])
     if i == 2999:
-        archivo.write(f"\t({rut_cliente}, '{nombre}', '{apellido}', {telefono}, {id_comuna});\n")
+        archivo.write(f"\t({rut_cliente}, '{nombre}', '{apellido}', {telefono}, {id_comuna}, {sexo});\n")
     else:
-        archivo.write(f"\t({rut_cliente}, '{nombre}', '{apellido}', {telefono}, {id_comuna}),\n")
+        archivo.write(f"\t({rut_cliente}, '{nombre}', '{apellido}', {telefono}, {id_comuna}, {sexo}),\n")
 
 print("======Cliente Succesful======")
 
@@ -244,7 +245,7 @@ for i in range(100):
         j = j + 1
     id_comuna = matrizPeluqueria[j-1][2]
 
-    matrizEmpleado.append([rut_empleado, nombre, apellido, id_comuna])
+    matrizEmpleado.append([rut_empleado, nombre, apellido, telefono, id_comuna])
     if i == 99:
         archivo.write(f"\t({rut_empleado}, '{nombre}', '{apellido}', '{telefono}', {id_comuna});\n")
     else:
@@ -294,7 +295,7 @@ for i in range(len(matrizEmpleado)):
     mes = rd.randint(1,12)
     if (mes<10):
         mes = '0'+str(mes)
-    año = rd.choice([2020,2021,2022,2023])
+    año = rd.choice([2022,2023])
     fecha= str(dia)+'-'+str(mes)+'-'+str(año)
     matrizEmpleadoPeluqueria.append([fecha,None,id_peluqueria,rut_empleado])
     if i == len(matrizEmpleado)-1:
@@ -307,12 +308,13 @@ print("======Empleado-Peluqueria Succesful======")
 #pago(id_pago, fecha,monto, rut_empleado)
 matrizPago = []
 id_pago=1
-archivo.write("\nINSERT INTO pago(id_pago, fecha, monto, rut_empleado) \nVALUES\n")
+archivo.write("\nINSERT INTO pago(id_pago, fecha, monto, rut_empleado, id_peluqueria) \nVALUES\n")
 
 for i in range(len(matrizEmpleado)):
     rut_empleado = matrizEmpleado[i][0]
     mes = int(matrizEmpleadoPeluqueria[i][0][3:5])
     año = int(matrizEmpleadoPeluqueria[i][0][6:10])
+    id_peluqueria = matrizEmpleadoPeluqueria[i][2]
     while(año<=2024):
         mes=1
         if año == 2024:
@@ -325,11 +327,11 @@ for i in range(len(matrizEmpleado)):
             else:
                 fecha= '20-'+str(mes)+'-'+str(año)
             monto= rd.randint(200,1000)*100
-            matrizPago.append([id,fecha,monto,rut_empleado])
+            matrizPago.append([id_pago,fecha,monto,rut_empleado, id_peluqueria])
             if i == len(matrizEmpleado)-1 and fecha =='20-06-2024':
-                archivo.write(f"\t({id_pago},'{fecha}' , {monto}, {rut_empleado});\n")
+                archivo.write(f"\t({id_pago},'{fecha}' , {monto}, {rut_empleado}, {id_peluqueria});\n")
             else:
-                archivo.write(f"\t({id_pago},'{fecha}' , {monto}, {rut_empleado}),\n")
+                archivo.write(f"\t({id_pago},'{fecha}' , {monto}, {rut_empleado}, {id_peluqueria}),\n")
             id_pago+=1
             mes+=1
         año+=1
@@ -353,7 +355,7 @@ for i in range(len(matrizProfesion)):
                 archivo.write(f"\t({id_servicio}, {id_profesion}),\n")
             id_pago+=1
     if manicurista:
-        servicios = rd.sample(matrizServicio[18:25], rd.randint(1,7))
+        servicios = rd.sample(matrizServicio[19:25], rd.randint(1,6))
         for j in servicios:
             id_servicio= j[0]
             matrizProfesionServicio.append([id_servicio,id_profesion])
@@ -379,39 +381,43 @@ for i in range(len(matrizPeluqueria)):
 print("======Producto-Peluqueria Succesful======")
 
 #boleta_venta(id_boleta_venta,Fecha,rut_cliente)
-archivo.write("\nINSERT INTO \"boleta_venta\"(id_boleta_venta, fecha, rut_cliente, monto) \nVALUES\n")
+archivo.write("\nINSERT INTO \"boleta_venta\"(id_boleta_venta, fecha, rut_cliente, monto, id_peluqueria) \nVALUES\n")
 matrizBoletaVenta=[]
 matrizDetalle = []
 clientes = rd.sample(matrizCliente, rd.randint(1500,3000))
 id_boleta_venta = 1
 for i in clientes:
     rut_cliente = i[0]
-    cantBol=rd.randint(1,40)
+    cantBol=rd.randint(1,25)
+    while True:
+        id_peluqueria = rd.randint(1,40)
+        if matrizPeluqueria[id_peluqueria-1][2] == i[4]:
+            break
     for j in range(cantBol):
         mes = f'{rd.randint(1, 12):02}'
         dia = f'{rd.randint(1, 28):02}'
         año = rd.randint(2020, 2023)
         fecha = f'{dia}-{mes}-{año}'
-        id_boleta_venta += 1
         productos = rd.sample(matrizProducto,rd.randint(1,15))
         monto = 0
-        for j in productos:
-            id_producto = j[0]
+        for p in productos:
+            id_producto = p[0]
             cantidad= rd.randint(1,13)
-            matrizDetalle.append([cantidad,id_producto,id_boleta_venta])
-            monto += cantidad * j[2]
-        matrizBoletaVenta.append([id_boleta_venta,fecha,rut_cliente, monto])
-        if i == matrizCliente[len(matrizCliente)-1] and j == cantBol-1:
-            archivo.write(f"\t({id_boleta_venta}, '{fecha}', {rut_cliente});\n")
+            matrizDetalle.append([cantidad, id_producto, id_boleta_venta])
+            monto += cantidad * p[2]
+        matrizBoletaVenta.append([id_boleta_venta,fecha,rut_cliente, monto, id_peluqueria])
+        if i == clientes[len(clientes)-1] and j == cantBol-1 and p == productos[len(productos)-1]:
+            archivo.write(f"\t({id_boleta_venta}, '{fecha}', {rut_cliente}, {monto}, {id_peluqueria});\n")
         else:
-            archivo.write(f"\t({id_boleta_venta}, '{fecha}', {rut_cliente}),\n")
+            archivo.write(f"\t({id_boleta_venta}, '{fecha}', {rut_cliente}, {monto}, {id_peluqueria}),\n")
+        id_boleta_venta += 1
 print("======Boleta_Venta Succesful======")
 
 
 #detalles(cantidad, id_producto, id_boleta_venta)
-archivo.write("\nINSERT INTO detalle(cantidad,id_producto, id_boleta_venta) \nVALUES\n")
+archivo.write("\nINSERT INTO detalle(cantidad,id_producto, id_boleta_venta, id_peluqueria) \nVALUES\n")
 for i in matrizDetalle:
-    if i == matrizBoletaVenta[len(matrizBoletaVenta)-1] and j == productos[len(productos)-1]:
+    if i == matrizDetalle[len(matrizDetalle)-1]:
         archivo.write(f"\t({i[0]}, {i[1]}, {i[2]});\n")
     else:
         archivo.write(f"\t({i[0]}, {i[1]}, {i[2]}),\n")
@@ -426,8 +432,9 @@ ids =[]
 id_cita = 1
 id_boleta_cita =1
 for i in matrizProfesion:
-    cantCi = rd.randint(10,40)
+    cantCi = rd.randint(1,10)
     id_profesion = i[0]
+    id_peluqueria = rd.randint(0,39)
     for j in range(cantCi):
         if i[1] and i[2]:
             id_servicio = rd.randint(1,len(matrizServicio))
@@ -447,10 +454,14 @@ for i in matrizProfesion:
             id = f'{fecha}:{id_profesion}'
             if id not in ids:
                 break
-        for l in range(matrizServicio[id_servicio-1][3]):
-            fecha = f'{dia}-{mes}-{año} {hora:02}:{minutos:02}'
-            id = f'{fecha}:{id_profesion}'
-            ids.append(id)
+        ids.append(id)
+        matrizCita.append([id_cita, rut_cliente, id_boleta_cita, id_servicio, fecha, id_profesion, id])
+        if i == matrizProfesion[len(matrizProfesion)-1] and matrizServicio[id_servicio-1][3] == 1 and j ==cantCi-1:
+           archivo.write(f"\t({id_cita}, {rut_cliente}, {id_boleta_cita}, {id_servicio}, '{fecha}', {id_profesion}, '{id}');\n")
+        else:
+            archivo.write(f"\t({id_cita}, {rut_cliente}, {id_boleta_cita}, {id_servicio}, '{fecha}', {id_profesion}, '{id}'),\n")
+        id_cita += 1
+        for l in range(matrizServicio[id_servicio-1][3]-1):
             if minutos==0:
                 minutos=30
             else:
@@ -459,58 +470,124 @@ for i in matrizProfesion:
                 else:
                     hora += 1
                 minutos = 0
-            fecha
+            fecha = f'{dia}-{mes}-{año} {hora:02}:{minutos:02}'
+            id = f'{fecha}:{id_profesion}'
+            ids.append(id)
             matrizCita.append([id_cita, rut_cliente, id_boleta_cita, id_servicio, fecha, id_profesion, id])
-        matrizBoletaCita.append([id_boleta_cita,rut_cliente,matrizServicio[id_servicio-1][2]])
-        if i == matrizProfesion[len(matrizProfesion)-1] and j == cantCi-1:
-            archivo.write(f"\t({id_cita}, {rut_cliente}, {id_boleta_cita}, {id_servicio}, {fecha}, {id_profesion}, {id});\n")
-        else:
-            archivo.write(f"\t({id_cita}, {rut_cliente}, {id_boleta_cita}, {id_servicio}, {fecha}, {id_profesion}, {id}),\n")
-        id_cita += 1
+            if i == matrizProfesion[len(matrizProfesion)-1] and j == cantCi-1 and l == matrizServicio[id_servicio-1][3]-2:
+                archivo.write(f"\t({id_cita}, {rut_cliente}, {id_boleta_cita}, {id_servicio}, '{fecha}', {id_profesion}, '{id}');\n")
+            else:
+                archivo.write(f"\t({id_cita}, {rut_cliente}, {id_boleta_cita}, {id_servicio}, '{fecha}', {id_profesion}, '{id}'),\n")
+            id_cita += 1
+        matrizBoletaCita.append([id_boleta_cita,rut_cliente,matrizServicio[id_servicio-1][2],id_peluqueria])
         id_boleta_cita += 1
 print("======Cita Succesful======")
 
 
 #boleta_cita(id_boleta_cita, rut_cliente, monto)
-archivo.write("\nINSERT INTO \"boleta_cita\" (id_boleta_cita,rut_cliente, monto) \nVALUES\n")
+archivo.write("\nINSERT INTO \"boleta_cita\" (id_boleta_cita, rut_cliente, monto, id_peluqueria) \nVALUES\n")
 for i in matrizBoletaCita:
     if i == matrizBoletaCita[len(matrizBoletaCita)-1]:
-        archivo.write(f"\t({i[0]}, {i[1]},{i[2]});\n")
+        archivo.write(f"\t({i[0]}, {i[1]},{i[2]}, {i[3]});\n")
     else:
-        archivo.write(f"\t({i[0]}, {i[1]},{i[2]}),\n")
+        archivo.write(f"\t({i[0]}, {i[1]},{i[2]}, {i[3]}),\n")
 print("======BoletaCita Succesful======")
 
-
-    
-        
-        
-        
-
-    
+archivo.close()
 
 
 
 
 
+archivo = open("datosEstrella.sql", "w")
+#cliente(rut_cliente,nombre, apellido, telefono, comuna, region, sexo)
+archivo.write("\nINSERT INTO de cliente(rut_cliente, nombre, apellido, telefono, comuna, region, sexo) \nVALUES\n")
+for i in matrizCliente:
+    if i == matrizCliente[len(matrizCliente)-1]:
+        archivo.write(f"\t({i[0]}, '{i[1]}', '{i[2]}', {i[3]}, '{matrizComuna[i[4]-1][1]}', '{matrizRegion[matrizComuna[i[4]-1][2]-1][1]}', {i[5]});\n")
+    else:
+        archivo.write(f"\t({i[0]}, '{i[1]}', '{i[2]}', {i[3]}, '{matrizComuna[i[4]-1][1]}', '{matrizRegion[matrizComuna[i[4]-1][2]-1][1]}', {i[5]}),\n")
+print("======Cliente Succesful======")
+#empleado(rut_empleado,nombre, apellido, telefono, id_comuna)
+archivo.write("\nINSERT INTO de empleado(rut_empleado, nombre, apellido, telefono, comuna, region) \nVALUES\n")
+for i in matrizEmpleado:
+    if i == matrizEmpleado[len(matrizEmpleado)-1] :
+        archivo.write(f"\t({i[0]}, '{i[1]}', '{i[2]}', {i[3]}, '{matrizComuna[i[4]-1][1]}', '{matrizRegion[matrizComuna[i[4]-1][2]-1][1]}');\n")
+    else:
+        archivo.write(f"\t({i[0]}, '{i[1]}', '{i[2]}', {i[3]}, '{matrizComuna[i[4]-1][1]}', '{matrizRegion[matrizComuna[i[4]-1][2]-1][1]}'),\n")
+print("======Empleado Succesful======")
 
 
+#profesion(id_profesion, peluquero, manicurista, rut_empleado)
+archivo.write("\nINSERT INTO de profesion(id_profesion, peluquero, manicurista) \nVALUES\n")
+for i in matrizProfesion:
+    if i == matrizProfesion[len(matrizProfesion)-1] :
+        archivo.write(f"\t({i[0]}, {i[1]}, {i[2]});\n")
+    else:
+        archivo.write(f"\t({i[0]}, {i[1]}, {i[2]}),\n")
+print("======Profesion Succesful======")
+
+#peluqueria(id_peluqueria, nombre, comuna, region)
+archivo.write("\nINSERT INTO de peluqueria(id_peluqueria, nombre, comuna, region) \nVALUES\n")
+for i in matrizPeluqueria:
+    if i == matrizPeluqueria[len(matrizPeluqueria)-1] :
+        archivo.write(f"\t({i[0]}, '{i[1]}', '{matrizComuna[i[2]-1][1]}', '{matrizRegion[matrizComuna[i[2]-1][2]-1][1]}');\n")
+    else:
+        archivo.write(f"\t({i[0]}, '{i[1]}', '{matrizComuna[i[2]-1][1]}', '{matrizRegion[matrizComuna[i[2]-1][2]-1][1]}'),\n")
+print("======Peluqueria Succesful======")
+
+#producto(id_producto, nombre,valor)
+archivo.write("\nINSERT INTO de producto(id_producto, nombre, valor) \nVALUES\n")
+for i in matrizProducto:
+    if i == matrizProducto[len(matrizProducto)-1] :
+        archivo.write(f"\t({i[0]}, '{i[1]}', {i[2]});\n")
+    else:
+        archivo.write(f"\t({i[0]}, '{i[1]}', {i[2]}),\n")
+print("======Producto Succesful======")
+
+#servicio(id_servicio, nombre, costo, duracion, especialidad)
+archivo.write("\nINSERT INTO servicio (id_servicio, nombre, costo, duracion, especialidad) \nVALUES\n")
+for i in matrizServicio:
+    if i == matrizServicio[len(matrizServicio)-1]:
+        archivo.write(f"\t({i[0]}, '{i[1]}',{i[2]},{i[3]},'{i[4]}');\n")
+    else:
+        archivo.write(f"\t({i[0]}, '{i[1]}',{i[2]},{i[3]},'{i[4]}'),\n")
+
+print("======Servicio Succesful======")
 
 
+#factCitas(id_cita, fecha, rut_cliente, id_boleta_cita, id_servicio, id_profesion, fechaprofesion, rut_empleado, id_comuna, mont, id_peluqueria)
+archivo.write("\nINSERT INTO de factCitas(id_cita, fecha, rut_cliente, id_boleta_cita, id_servicio, id_profesion, fechaprofesion, rut_empleado, monto, id_peluqueria) \nVALUES\n")
+#cita(id_cita, rut_cliente, id_boleta_cita, id_servicio, fecha, id_profesion, fechaprofesion)
+for i in matrizCita:
+    if i == matrizCita[len(matrizCita)-1] :
+        archivo.write(f"\t({i[0]}, '{i[4]}', {i[1]}, {i[2]}, {i[3]}, {i[5]}, '{i[6]}', {matrizProfesion[i[5]-1][3]}, {matrizBoletaCita[i[2]-1][2]}, {matrizBoletaCita[i[2]-1][3]});\n")
+    else:
+        archivo.write(f"\t({i[0]}, '{i[4]}', {i[1]}, {i[2]}, {i[3]}, {i[5]}, '{i[6]}', {matrizProfesion[i[5]-1][3]}, {matrizBoletaCita[i[2]-1][2]}, {matrizBoletaCita[i[2]-1][3]}),\n")
+print("======FactCita Succesful======")
+#factdetalle(id_factdetalle, cantidad, id_producto, id_boleta, fecha, id_peluqueria, rut_cliente)
+archivo.write("\nINSERT INTO de factdetalle(id_factdetalle, cantidad, id_producto, id_boleta, fecha, id_peluqueria, rut_cliente) \nVALUES\n")
+id_factdetalle = 1
+for i in matrizDetalle:
+    j = matrizBoletaVenta[i[2]-1]
+    if i == matrizDetalle[len(matrizDetalle)-1] :
+        archivo.write(f"\t({id_factdetalle}, {i[0]}, {i[1]}, {i[2]}, '{j[1]}', {j[4]}, {j[2]});\n")
+    else:
+        archivo.write(f"\t({id_factdetalle}, {i[0]}, {i[1]}, {i[2]}, '{j[1]}', {j[4]}, {j[2]}),\n")
+    id_factdetalle += 1
+print("======FactDetalle Succesful======")
 
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-##tablas restantes
+#factempleado(id_factempleado, id_peluqueria, rut_empleado, id_profesion, fecha, monto)
+archivo.write("\nINSERT INTO de factempleado(id_factempleado, id_peluqueria, rut_empleado, id_profesion, fecha, monto) \nVALUES\n")
+for i in matrizPago:
+    for j in matrizProfesion:
+        if j[3] == i[3]:
+            break
+    id_factempleado = 1
+    if i == matrizPago[len(matrizPago)-1] :
+        archivo.write(f"\t({i[0]}, {i[4]}, {i[3]}, {j[0]}, '{i[1]}', {i[2]});\n")
+    else:
+        archivo.write(f"\t({i[0]}, {i[4]}, {i[3]}, {j[0]}, '{i[1]}', {i[2]}),\n")
+    id_factempleado += 1
+print("======FactEmpleado Succesful======")
+archivo.close()

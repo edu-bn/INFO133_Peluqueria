@@ -179,6 +179,7 @@ def actualizar():
 
     conn_source.close()
     conn_dest.close()
+    print("Actualizado con exito")
 
 actualizar()
 

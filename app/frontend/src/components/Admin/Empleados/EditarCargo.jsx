@@ -1,71 +1,113 @@
-import { useState } from 'react';
-import { Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure } from '@chakra-ui/react';
-import {FormControl, FormLabel, FormErrorMessage, FormHelperText,
-  } from '@chakra-ui/react'
-  import { Input } from '@chakra-ui/react'
-  import { Switch } from '@chakra-ui/react'
-  import { Checkbox, CheckboxGroup } from '@chakra-ui/react'
-  import { Stack } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+import { Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, Box } from '@chakra-ui/react';
+import { FormControl, FormLabel, Switch, Checkbox, CheckboxGroup, Stack } from '@chakra-ui/react';
+import axios from 'axios';
 
-  
-  const EditarCargo = ({ isOpen, onClose }) => {
+const EditarCargo = ({ isOpen, onClose, empleado }) => {
+  const [serviciosPeluquero, setServiciosPeluquero] = useState([]);
+  const [serviciosManicurista, setServiciosManicurista] = useState([]);
+  const [isPeluquero, setIsPeluquero] = useState(false);
+  const [isManicurista, setIsManicurista] = useState(false);
+  const [checkedItemsPeluquero, setCheckedItemsPeluquero] = useState([]);
+  const [checkedItemsManicurista, setCheckedItemsManicurista] = useState([]);
 
-    const servicios_peluquero = [
-      { id_servicio: 1, nombre: 'Corte de Pelo', costo: 10000, duracion: 1 },
-      { id_servicio: 2, nombre: 'Tinte', costo: 20000, duracion: 3 },
-      { id_servicio: 3, nombre: 'Alisado', costo: 30000, duracion: 2 }
-    ];
-    
-    const servicios_manicurista = [
-      {id_servicio: 1, nombre: 'Maquillaje', costo: 10000, duracion: 1},
-      {id_servicio: 2, nombre: 'Manicure', costo: 20000, duracion: 3},
-      {id_servicio: 3, nombre: 'Pedicure', costo: 30000, duracion: 2},
-    ];
-
-    const [isPeluquero, setIsPeluquero] = useState(false);
-    const [isManicurista, setIsManicurista] = useState(false);
-    const [checkedItems, setCheckedItems] = useState(
-      new Array(servicios_peluquero.length).fill(false),
-      new Array(servicios_manicurista.length).fill(false)
-    );
-
-    const handlePeluqueroChange = () => setIsPeluquero(!isPeluquero);
-    
-    const handleManicuristaChange = () => setIsManicurista(!isManicurista);
-
-    const handleCheckboxChange = (index) => {
-      const updatedCheckedItems = [...checkedItems];
-      updatedCheckedItems[index] = !updatedCheckedItems[index];
-      setCheckedItems(updatedCheckedItems);
+  useEffect(() => {
+    const getServicios = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/servicios');
+        const servicios = response.data;
+        setServiciosPeluquero(servicios.filter((servicio) => servicio.especialidad === 'peluquero'));
+        setServiciosManicurista(servicios.filter((servicio) => servicio.especialidad === 'manicurista'));
+        setCheckedItemsPeluquero(new Array(servicios.filter((servicio) => servicio.especialidad === 'peluquero').length).fill(false));
+        setCheckedItemsManicurista(new Array(servicios.filter((servicio) => servicio.especialidad === 'manicurista').length).fill(false));
+      } catch (error) {
+        console.error('Error al obtener servicios:', error);
+      }
     };
-  
-    return (
-      <Modal isOpen={isOpen} onClose={onClose} size="xl">
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Editar Cargo Empleado</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <FormControl display='flex' alignItems='center' mb={4}>
-              <FormLabel htmlFor='is-peluquero' mb='0'>
-                Peluquero
-              </FormLabel>
-              <Switch id='is-peluquero' isChecked={isPeluquero} onChange={handlePeluqueroChange} />
-            </FormControl>
-            <FormControl display='flex' alignItems='center' mb={4}>
-              <FormLabel htmlFor='is-manicurista' mb='0'>
-                Manicurista
-              </FormLabel>
-              <Switch id='is-manicurista' isChecked={isManicurista} onChange={handleManicuristaChange}/>
-            </FormControl>
+    getServicios();
+  }, []);
+
+  useEffect(() => {
+    const getServiciosEmpleado = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/api/empleados/${empleado.rut_empleado}/servicios`);
+        const serviciosEmpleado = response.data;
+        
+        // Obtener IDs de servicios de peluquero y manicurista
+        const serviciosPeluqueroIds = serviciosPeluquero.map(servicio => servicio.id_servicio);
+        const serviciosManicuristaIds = serviciosManicurista.map(servicio => servicio.id_servicio);
+
+        // Filtrar servicios seleccionados del empleado
+        const checkedPeluqueroIds = serviciosPeluqueroIds.filter(id => serviciosEmpleado.some(serv => serv.id_servicio === id));
+        const checkedManicuristaIds = serviciosManicuristaIds.filter(id => serviciosEmpleado.some(serv => serv.id_servicio === id));
+
+        // Actualizar estados y checkboxes
+        setCheckedItemsPeluquero(serviciosPeluquero.map(servicio => checkedPeluqueroIds.includes(servicio.id_servicio)));
+        setCheckedItemsManicurista(serviciosManicurista.map(servicio => checkedManicuristaIds.includes(servicio.id_servicio)));
+
+        setIsPeluquero(checkedPeluqueroIds.length > 0);
+        setIsManicurista(checkedManicuristaIds.length > 0);
+      } catch (error) {
+        console.error('Error al obtener servicios del empleado:', error);
+      }
+    };
+
+    if (empleado) {
+      getServiciosEmpleado();
+    }
+  }, [empleado, serviciosPeluquero, serviciosManicurista]);
+
+  const handleCheckboxChange = (index, isPeluquero) => {
+    if (isPeluquero) {
+      const updatedCheckedItems = [...checkedItemsPeluquero];
+      updatedCheckedItems[index] = !updatedCheckedItems[index];
+      setCheckedItemsPeluquero(updatedCheckedItems);
+    } else {
+      const updatedCheckedItems = [...checkedItemsManicurista];
+      updatedCheckedItems[index] = !updatedCheckedItems[index];
+      setCheckedItemsManicurista(updatedCheckedItems);
+    }
+  };
+
+  const handleCloseModal = () => {
+    const idServiciosSeleccionados = [
+      ...serviciosPeluquero.filter((_, index) => checkedItemsPeluquero[index]).map(servicio => servicio.id_servicio),
+      ...serviciosManicurista.filter((_, index) => checkedItemsManicurista[index]).map(servicio => servicio.id_servicio)
+    ];
+
+    console.log('Editar cargo:', idServiciosSeleccionados, isPeluquero, isManicurista);
+    onClose(idServiciosSeleccionados, isManicurista, isPeluquero);
+  };
+
+  return (
+    <Modal isOpen={isOpen} onClose={handleCloseModal} size="xl">
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Editar Cargo Empleado</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <FormControl display='flex' alignItems='center' mb={4}>
+            <FormLabel htmlFor='is-peluquero' mb='0'>
+              Peluquero
+            </FormLabel>
+            <Switch id='is-peluquero' isChecked={isPeluquero} onChange={() => setIsPeluquero(!isPeluquero)} />
+          </FormControl>
+          <FormControl display='flex' alignItems='center' mb={4}>
+            <FormLabel htmlFor='is-manicurista' mb='0'>
+              Manicurista
+            </FormLabel>
+            <Switch id='is-manicurista' isChecked={isManicurista} onChange={() => setIsManicurista(!isManicurista)} />
+          </FormControl>
+          <Box borderWidth="1px" borderColor="gray.200" borderRadius="md" p={4} mb={4} maxHeight="200px" overflowY="auto">
             {isPeluquero && (
               <CheckboxGroup colorScheme='teal'>
-                <Stack spacing={[5, 1]} direction={['column', 'row']}>
-                  {servicios_peluquero.map((servicio, index) => (
+                <Stack spacing={[1, 2]} direction='column'>
+                  {serviciosPeluquero.map((servicio, index) => (
                     <Checkbox
                       key={servicio.id_servicio}
-                      isChecked={checkedItems[index]}
-                      onChange={() => handleCheckboxChange(index)}
+                      id={`peluquero-${index}`}
+                      isChecked={checkedItemsPeluquero[index]}
+                      onChange={() => handleCheckboxChange(index, true)}
                     >
                       {servicio.nombre}
                     </Checkbox>
@@ -75,12 +117,13 @@ import {FormControl, FormLabel, FormErrorMessage, FormHelperText,
             )}
             {isManicurista && (
               <CheckboxGroup colorScheme='teal'>
-                <Stack spacing={[5, 1]} direction={['column', 'row']}>
-                  {servicios_manicurista.map((servicio, index) => (
+                <Stack spacing={[1, 2]} direction='column'>
+                  {serviciosManicurista.map((servicio, index) => (
                     <Checkbox
                       key={servicio.id_servicio}
-                      isChecked={checkedItems[index]}
-                      onChange={() => handleCheckboxChange(index)}
+                      id={`manicurista-${index}`}
+                      isChecked={checkedItemsManicurista[index]}
+                      onChange={() => handleCheckboxChange(index, false)}
                     >
                       {servicio.nombre}
                     </Checkbox>
@@ -88,15 +131,16 @@ import {FormControl, FormLabel, FormErrorMessage, FormHelperText,
                 </Stack>
               </CheckboxGroup>
             )}
-          </ModalBody>
-          <ModalFooter>
-            <Button onClick={onClose}>
-              Confirmar
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    );
-  };
-  
-  export default EditarCargo;
+          </Box>
+        </ModalBody>
+        <ModalFooter>
+          <Button onClick={handleCloseModal}>
+            Confirmar
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  );
+};
+
+export default EditarCargo;

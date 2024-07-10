@@ -9,6 +9,8 @@ const peluqueriaRoutes = require('./routes/peluqueria');
 const clienteRoutes = require('./routes/clientes');
 const empleadoRoutes = require('./routes/empleados');
 const servicioRoutes = require('./routes/servicios');
+const profesionalRoutes = require('./routes/profesionales');
+const reservaRoutes = require('./routes/reservas');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -27,6 +29,9 @@ app.use('/api/peluquerias', peluqueriaRoutes);
 app.use('/api/clientes', clienteRoutes);
 app.use('/api/empleados', empleadoRoutes);
 app.use('/api/servicios', servicioRoutes);
+app.use('/api/profesionales', profesionalRoutes);
+app.use('/api/reservas', reservaRoutes);
+
 
 // Iniciar servidor
 app.listen(PORT, () => {

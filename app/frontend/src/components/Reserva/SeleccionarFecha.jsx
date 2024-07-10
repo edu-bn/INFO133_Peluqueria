@@ -1,17 +1,26 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import DatePicker from "react-datepicker";
-import './SeleccionarFecha.css';
 import "react-datepicker/dist/react-datepicker.css";
+import './SeleccionarFecha.css';
 
-// CSS Modules, react-datepicker-cssmodules.css
-// import 'react-datepicker/dist/react-datepicker-cssmodules.css';
-
-const SeleccionarFecha = () => {
+const SeleccionarFecha = ({ setFechaSeleccionada }) => {
   const [startDate, setStartDate] = useState(new Date());
+
+  // Función para manejar el cambio de fecha
+  const handleDateChange = (date) => {
+    setStartDate(date); // Actualiza startDate con la nueva fecha seleccionada
+    setFechaSeleccionada(date); // Pasa la fecha seleccionada a setFechaSeleccionada
+  };
+
   return (
     <div>
-        <label htmlFor="datePicker" className="datepicker-label">Seleccionar fecha</label>
-        <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
+      <label htmlFor="datePicker" className="datepicker-label">Seleccionar fecha</label>
+      <DatePicker
+        selected={startDate}
+        onChange={handleDateChange} // Llama a handleDateChange cuando cambia la fecha
+        dateFormat="dd-MM-yy" // Formato para mostrar la fecha con guiones
+        className="date-picker" // Clase CSS para personalizar estilos si es necesario
+      />
     </div>
   );
 };

@@ -4,7 +4,7 @@ import { Alert, AlertIcon, AlertTitle, Button } from "@chakra-ui/react";
 
 import Top from "../Top.jsx";
 import SeleccionarServicio from "./SeleccionarServicio.jsx";
-import SeleccionarProfesional from "./SeleccionarEmpleado.jsx";
+import SeleccionarProfesional from "./SeleccionarProfesional.jsx";
 import SeleccionarFecha from "./SeleccionarFecha.jsx";
 import SeleccionarHora from './SelecionarHora.jsx';
 
@@ -13,14 +13,15 @@ const Reserva = () => {
   const location = useLocation();
   const { local } = location.state || {};
   const { rut } = location.state || {};
-  console.log(local, rut);
   let showAlert = false;
   if (!local && !rut) {
     showAlert = true;
   }
-  
-  const [profesionalSeleccionado, setProfesionalSeleccionado] = useState(null);
 
+  const [fechaSeleccionada, setFechaSeleccionada] = useState(null);
+  const [profesionalSeleccionado, setProfesionalSeleccionado] = useState(null);
+  const [servicioSeleccionado, setServicioSeleccionado] = useState(null);
+  const [horaSeleccionada, setHoraSeleccionada] = useState(null);
 
   const handleReturnHome = () => {
     navigateTo("/");
@@ -38,10 +39,10 @@ const Reserva = () => {
       </Button>
     </Alert>
     ) : (<div className="horizontal-container">
-          <SeleccionarFecha/>
-          <SeleccionarProfesional setProfesionalSeleccionado={setProfesionalSeleccionado}/> 
-          <SeleccionarServicio></SeleccionarServicio>
-          <SeleccionarHora></SeleccionarHora>
+          <SeleccionarFecha setFechaSeleccionada={setFechaSeleccionada}/>
+          <SeleccionarProfesional idPeluqueria={local.id_peluqueria} setProfesionalSeleccionado={setProfesionalSeleccionado}/> 
+          <SeleccionarServicio setServicioSeleccionado={setServicioSeleccionado}></SeleccionarServicio>
+          <SeleccionarHora setHoraSeleccionada={setHoraSeleccionada}></SeleccionarHora>
       </div>)
     }
   </>

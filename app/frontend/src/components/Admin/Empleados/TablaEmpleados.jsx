@@ -70,7 +70,7 @@ const TablaEmpleados = () => {
           {empleados.map((empleado) => (
             <Tr key={empleado.rut_empleado}>
               <Td>
-                <Button colorScheme="red"> - </Button>
+                <Button colorScheme="red" > - </Button>
               </Td>
               <Td>{empleado.rut_empleado}</Td>
               <Td>{empleado.nombre} {empleado.apellido}</Td>

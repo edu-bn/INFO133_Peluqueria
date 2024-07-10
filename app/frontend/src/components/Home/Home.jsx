@@ -30,6 +30,9 @@ const Home = () => {
     } else {
       setAlertaVisible(true);
     }
+    if (isRutOnDatabase){
+      navigateTo('/reserva', { state: { local: localSeleccionado, rut: rutCliente } });
+    }
   };
 
   const handleClickProductos = () => {

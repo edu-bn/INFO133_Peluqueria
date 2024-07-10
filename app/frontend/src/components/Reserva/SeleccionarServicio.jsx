@@ -1,7 +1,7 @@
 import { Select, FormControl, FormLabel } from "@chakra-ui/react";
 
 
-const SeleccionarServicio = () => {
+const SeleccionarServicio = (setServicioSeleccionado) => {
 
     return(
         <div>

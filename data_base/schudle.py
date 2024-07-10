@@ -134,7 +134,7 @@ def actualizar():
 
     matrizEmpleadoIns = []
     for i in matrizEmpleado:
-        matrizEmpleadoIns.append([i[5], i[0], i[1], i[2], matrizComuna[i[4]-1][1], matrizRegion[matrizComuna[i[4]-1][2]-1][0]])
+        matrizEmpleadoIns.append([i[4], i[0], i[1], i[2], matrizComuna[i[3]-1][1], matrizRegion[matrizComuna[i[3]-1][2]-1][0]])
     insertarMat(conn_dest, matrizEmpleadoIns, "empleado(rut_empleado, nombre, apellido, telefono, comuna, region)")
 
     matrizProfesionIns = []

@@ -1,7 +1,30 @@
-import { Table, Thead, Tbody, Tr, Th, Td, TableContainer } from '@chakra-ui/react';
+import React, { useState } from 'react';
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableContainer
+} from '@chakra-ui/react';
 import AddButton from './AddButton.jsx';
 
 const TablaProductos = ({ productos, onAddButtonClick }) => {
+  const [selectedProducts, setSelectedProducts] = useState([]);
+
+  const handleAddButtonClick = (producto, cantidad) => {
+    if (cantidad > 0) {
+      const newSelectedProduct = { id: producto.id_producto, cantidad };
+      setSelectedProducts((prevSelectedProducts) => [
+        ...prevSelectedProducts,
+        newSelectedProduct
+      ]);
+      onAddButtonClick(producto, cantidad);
+    }
+  };
+  
+
   return (
     <TableContainer>
       <Table variant='simple'>
@@ -22,7 +45,9 @@ const TablaProductos = ({ productos, onAddButtonClick }) => {
               <Td isNumeric>${producto.valor}</Td>
               <Td>{producto.cant}</Td>
               <Td>
-                <AddButton onClick={() => onAddButtonClick(producto)} />
+                <AddButton
+                  onClick={(cantidad) => handleAddButtonClick(producto, cantidad)}
+                />
               </Td>
             </Tr>
           ))}

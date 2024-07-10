@@ -17,15 +17,11 @@ const VentanaVenta = ({ isOpen, onClose }) => {
         <ModalHeader>Compra realizada</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          descontar stock :v
-          detalle?
+          descontar stock 
         </ModalBody>
         <ModalFooter>
           <Button variant="ghost" right={"30px"} onClick={handleClickHome}>
             Salir
-          </Button>
-          <Button variant="ghost">
-            Seguir comprando
           </Button>
         </ModalFooter>
       </ModalContent>

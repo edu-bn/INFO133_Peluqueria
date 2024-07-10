@@ -25,9 +25,19 @@ const crearBoleta_cita = async (req, res) => {
 }
 
 const crearCita = async (req, res) => {
+    console.log('paso por aca?');
+    console.log('req.body:', req.body);
     try {
         const { fecha, rut_cliente, id_boleta_cita, id_servicio, id_profesion } = req.body;
+        console.log('fecha:', fecha);
+        console.log('rut_cliente:', rut_cliente);
+        console.log('id_boleta_cita:', id_boleta_cita);
+        console.log('id_servicio:', id_servicio);
+        console.log('id_profesion:', id_profesion);
+
         const cita = await Reserva.crearCita(fecha, rut_cliente, id_boleta_cita, id_servicio, id_profesion);
+
+
         res.status(201).json(cita);
     } catch (error) {
         console.error('Error creating cita:', error);

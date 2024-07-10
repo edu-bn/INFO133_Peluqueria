@@ -24,9 +24,14 @@ const Reserva = () => {
   const [profesionalSeleccionado, setProfesionalSeleccionado] = useState(null);
   const [servicioSeleccionado, setServicioSeleccionado] = useState(null);
   const [horaSeleccionada, setHoraSeleccionada] = useState(null);
+  const [alertMessage, setAlertMessage] = useState(false)
 
   const handleReturnHome = () => {
     navigateTo("/");
+  };
+  
+  const handleReservarSuccess = () => {
+    setAlertMessage("Reserva realizada con éxito.");
   };
 
   return (
@@ -60,7 +65,15 @@ const Reserva = () => {
         servicio={servicioSeleccionado ? servicioSeleccionado.id_servicio : null}
         />
       </div>
-      <ReservarButton hora={horaSeleccionada} profesional={profesionalSeleccionado} servicio={servicioSeleccionado} rut_cliente={rut} local={local}/>
+
+      {alertMessage && (
+          <Alert status="success" variant="subtle" mt={4}>
+            <AlertIcon />
+            <AlertTitle>{alertMessage}</AlertTitle>
+          </Alert>
+        )}
+        
+      <ReservarButton hora={horaSeleccionada} profesional={profesionalSeleccionado} servicio={servicioSeleccionado} rut_cliente={rut} local={local} onSuccess={handleReservarSuccess}/>
       </div>
       )
     }

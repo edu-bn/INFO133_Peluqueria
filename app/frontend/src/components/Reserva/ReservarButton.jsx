@@ -1,7 +1,7 @@
 import { Button } from "@chakra-ui/react";
 import axios from "axios";
 
-const ReservarButton = ({hora, profesional, servicio, rut_cliente, local}) => {
+const ReservarButton = ({hora, profesional, servicio, rut_cliente, local, onSuccess}) => {
     
     
 
@@ -10,9 +10,14 @@ const ReservarButton = ({hora, profesional, servicio, rut_cliente, local}) => {
         try {
             if(!hora || !profesional || !servicio)
                 return
-            const responseBoleta = await axios.post(`http://localhost:3000/api/reservas/crear-boleta-cita/${servicio.costo}/${rut_cliente}/${local.id_peluqueria}`);
+
+            const responseBoleta = await axios.post(`http://localhost:3000/api/reservas/crear-boleta-cita/`, {
+                monto: servicio.costo,
+                rut_cliente: rut_cliente,
+                id_peluqueria: local.id_peluqueria
+            });
             const id_boleta = responseBoleta.data.id_boleta_cita;
-            console.log('id_boleta:', id_boleta);
+            console.log('boleta', responseBoleta.data);
             
             hora = hora.replace('T', ' ');
             hora = hora.replace('Z', '');
@@ -25,14 +30,25 @@ const ReservarButton = ({hora, profesional, servicio, rut_cliente, local}) => {
                 let fechaHoraFormateada = fechaHora.toISOString().slice(0, 19).replace('T', ' ');
             
                 console.log('Hora:', fechaHoraFormateada);
+                console.log('Profesional:', profesional.id_profesion);
+                console.log('Servicio:', servicio.id_servicio);
+                console.log('Rut cliente:', rut_cliente);
+                console.log('Id boleta:', id_boleta);
+
                 
-                // const responseCita = await axios.post(`http://localhost:3000/api/reservas/crear-cita/${fechaHoraFormateada}/${rut_cliente}/${id_boleta}/${servicio.id_servicio}/${profesional.id_profesion}`);
-                // console.log('Cita creada:', responseCita.data);
+                const responseCita = await axios.post(`http://localhost:3000/api/reservas/crear-cita/`, {
+                    fecha: fechaHoraFormateada,
+                    rut_cliente: rut_cliente,
+                    id_boleta_cita: id_boleta,
+                    id_servicio: servicio.id_servicio,
+                    id_profesion: profesional.id_profesion
+                });
+                console.log('Cita:', responseCita.data);
             
                 // Sumar 30 minutos para la siguiente iteración
                 fechaHora.setMinutes(fechaHora.getMinutes() + 30);
             }
-            
+            onSuccess();
             
         } catch (error) {
             console.error("Error al reservar:", error);

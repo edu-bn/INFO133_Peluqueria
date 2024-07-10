@@ -20,7 +20,6 @@ const Productos = () => {
     showAlert = true;
   }
   
-
   const handleReturnHome = () => {
     navigateTo("/");
   };

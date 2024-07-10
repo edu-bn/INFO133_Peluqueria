@@ -54,6 +54,13 @@ const crearBoleta_cita = async (monto, rut_cliente, id_peluqueria) => {
 };
 
 const crearCita = async (fecha, rut_cliente, id_boleta_cita, id_servicio, id_profesion) => {
+    console.log('fecha en el model', fecha);
+    console.log('rut_cliente en el model', rut_cliente);
+    console.log('id_boleta_cita en el model', id_boleta_cita);
+    console.log('id_servicio en el model', id_servicio);
+    console.log('id_profesion en el model', id_profesion);
+    
+
     const horaprofesion = `${fecha}:${id_profesion}`;
 
     // Obtener el ultimo id de cita

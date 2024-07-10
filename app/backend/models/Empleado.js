@@ -104,6 +104,28 @@ const updateServicios = async (rut_empleado, servicios, isPeluquero, isManicuris
     }
 };
 
+const updateFechaFinEmpleado = async (rut_empleado, fecha_fin) => {
+    try {
+        const updateQuery = `
+            UPDATE "empleado-peluqueria"
+            SET fecha_fin = $1
+            WHERE rut_empleado = $2
+        `;
+        const { rowCount } = await pool.query(updateQuery, [fecha_fin, rut_empleado]);
+
+        if (rowCount > 0) {
+            console.log(`Se actualizó la fecha de fin para el empleado con rut: ${rut_empleado}`);
+        } else {
+            console.log(`No se encontró ningún registro en "empleado-peluqueria" para rut: ${rut_empleado}`);
+        }
+    } catch (error) {
+        console.error('Error al actualizar la fecha de fin del empleado:', error);
+        throw error;
+    }
+};
+
+
+
 
 
 module.exports = {
@@ -111,5 +133,6 @@ module.exports = {
     getAllEmpleadosServicios,
     updateServicios,
     addNewEmpleado,
-    getEmpleadoByRut
+    getEmpleadoByRut,
+    updateFechaFinEmpleado
 };

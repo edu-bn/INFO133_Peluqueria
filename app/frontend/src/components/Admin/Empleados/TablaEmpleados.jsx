@@ -25,6 +25,17 @@ const TablaEmpleados = () => {
     setIsModalOpen(true);
   };
 
+  const handleEliminarEmpleado = async (rut_empleado) => {
+    try {
+      const fecha_fin = new Date().toISOString().split('T')[0]; // Formato YYYY-MM-DD
+      await axios.put(`http://localhost:3000/api/empleados/${rut_empleado}/fecha-fin`, { fecha_fin });
+      const updatedEmpleados = empleados.filter(emp => emp.rut_empleado !== rut_empleado);
+      setEmpleados(updatedEmpleados);
+    } catch (error) {
+      console.error('Error al eliminar empleado:', error);
+    }
+  };
+
   const handleCloseModal = async (idServicios, isPeluquero, isManicurista) => {
     console.log('handle:', idServicios, isPeluquero, isManicurista);
 
@@ -70,7 +81,9 @@ const TablaEmpleados = () => {
           {empleados.map((empleado) => (
             <Tr key={empleado.rut_empleado}>
               <Td>
-                <Button colorScheme="red" > - </Button>
+                <Button colorScheme="red" onClick={() => handleEliminarEmpleado(empleado.rut_empleado)}>
+                   - 
+                </Button>
               </Td>
               <Td>{empleado.rut_empleado}</Td>
               <Td>{empleado.nombre} {empleado.apellido}</Td>

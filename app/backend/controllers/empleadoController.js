@@ -63,6 +63,19 @@ const actualizarServiciosEmpleado = async (req, res) => {
     }
 };
 
+const actualizarFechaFinEmpleado = async (req, res) => {
+    const { rut_empleado } = req.params;
+    const { fecha_fin } = req.body;
+  
+    try {
+      await Empleado.updateFechaFinEmpleado(rut_empleado, fecha_fin);
+      res.status(200).json({ message: `Fecha de fin actualizada para el empleado con rut ${rut_empleado}` });
+    } catch (error) {
+      console.error('Error al actualizar la fecha de fin del empleado:', error);
+      res.status(500).json({ error: 'Error al actualizar la fecha de fin del empleado' });
+    }
+  };
+
 
 
 module.exports = {
@@ -70,5 +83,6 @@ module.exports = {
     getServiciosDelEmpleado,
     actualizarServiciosEmpleado,
     agregarNuevoEmpleado,
-    getEmpleado
+    getEmpleado,
+    actualizarFechaFinEmpleado
 };

@@ -11,13 +11,13 @@ const VentanaVenta = ({ isOpen, onClose }) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="xl" >
+    <Modal isOpen={isOpen} onClose={onClose} size="xl" closeOnOverlayClick={false} closeButton={false}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Compra realizada</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          descontar stock 
+          Compra Realizada Con Exito 
         </ModalBody>
         <ModalFooter>
           <Button variant="ghost" right={"30px"} onClick={handleClickHome}>

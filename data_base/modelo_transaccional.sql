@@ -66,7 +66,6 @@ CREATE TABLE public.empleado (
 	nombre varchar NULL,
 	apellido varchar NULL,
 	telefono int4 NULL,
-	sueldo int4 NULL,
 	id_comuna int4 NULL,
 	rut_empleado int4 NOT NULL,
 	CONSTRAINT empleado_pk PRIMARY KEY (rut_empleado),
@@ -102,8 +101,6 @@ CREATE TABLE public."producto-peluqueria" (
 	CONSTRAINT producto_peluqueria_peluqueria_fk FOREIGN KEY (id_peluqueria) REFERENCES public.peluqueria(id_peluqueria),
 	CONSTRAINT producto_peluqueria_producto_fk FOREIGN KEY (id_producto) REFERENCES public.producto(id_producto)
 );
-ALTER TABLE "producto-peluqueria"
-ADD CONSTRAINT pk_producto_peluqueria PRIMARY KEY (id_peluqueria, id_producto);
 
 
 -- public.profesion definition

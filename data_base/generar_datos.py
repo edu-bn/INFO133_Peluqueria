@@ -60,7 +60,7 @@ matrizServicio = [
     [1, 'Corte de Cabello Hombre', 15000, 1, 'peluquero'],
     [2, 'Corte de Cabello Mujer', 20000, 2, 'peluquero'],
     [3, 'Tinte para Cabello', 35000, 4, 'peluquero'],
-    [4, 'Peinado', 25000, 2, 'peluquero'],
+    [4, 'Perfilado Barba', 10000, 1, 'peluquero'],
     [5, 'Mascarilla Capilar', 8000, 1, 'peluquero'],
     [6, 'Alisado Permanente', 50000, 6, 'peluquero'],
     [7, 'Depilacion de Cejas', 7000, 1, 'peluquero'],
@@ -326,7 +326,7 @@ for i in range(len(matrizEmpleado)):
                 fecha= '20-0'+str(mes)+'-'+str(año)
             else:
                 fecha= '20-'+str(mes)+'-'+str(año)
-            monto= rd.randint(200,1000)*100
+            monto= rd.randint(200,1000)*1000
             matrizPago.append([id_pago,fecha,monto,rut_empleado, id_peluqueria])
             if i == len(matrizEmpleado)-1 and fecha =='20-06-2024':
                 archivo.write(f"\t({id_pago},'{fecha}' , {monto}, {rut_empleado}, {id_peluqueria});\n")

@@ -6,6 +6,23 @@ const getAllProductos = async () => {
   return rows;
 };
 
+const getStockProducto = async (id_producto, id_peluqueria) => {
+  const query = `
+    SELECT cant 
+    FROM "producto-peluqueria"
+    WHERE id_producto = $1 AND id_peluqueria = $2
+  `;
+  const values = [id_producto, id_peluqueria];
+  
+  try {
+    const { rows } = await pool.query(query, values);
+    return rows[0]; // Esto devolverá el objeto con la propiedad `cant` correspondiente
+  } catch (error) {
+    console.error('Error al obtener el stock del producto:', error);
+    throw error;
+  }
+};
+
 const getProductoById = async (id) => {
   const query = 'SELECT * FROM producto WHERE id_producto = $1';
   const values = [id];
@@ -75,5 +92,6 @@ module.exports = {
   createProducto,
   updateProducto,
   updateStockProducto,
-  addProductosToAllPeluquerias
+  addProductosToAllPeluquerias,
+  getStockProducto
 };

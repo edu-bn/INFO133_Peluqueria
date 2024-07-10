@@ -9,6 +9,16 @@ const getProductos = async (req, res) => {
   }
 };
 
+const obtenerStockProducto = async (req, res) => {
+  const { id_producto, id_peluqueria } = req.params; // Suponiendo que pasas estos parámetros en la URL
+  try {
+    const stock = await Producto.getStockProducto(id_producto, id_peluqueria);
+    res.json(stock); // Esto enviará la cantidad de stock como respuesta
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 const getProducto = async (req, res) => {
   const { id } = req.params;
   try {
@@ -71,5 +81,6 @@ module.exports = {
   crearProducto,
   actualizarProducto,
   actualizarStockProducto,
-  addProductosToAllPeluquerias
+  addProductosToAllPeluquerias,
+  obtenerStockProducto
 };

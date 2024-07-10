@@ -47,6 +47,7 @@ const TablaProductos = ({ productos, onAddButtonClick }) => {
               <Td>
                 <AddButton
                   onClick={(cantidad) => handleAddButtonClick(producto, cantidad)}
+                  maxStock= {producto.cant}
                 />
               </Td>
             </Tr>

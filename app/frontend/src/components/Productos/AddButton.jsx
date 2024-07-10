@@ -7,7 +7,7 @@ import {
   NumberDecrementStepper,
 } from '@chakra-ui/react'
 
-const AddButton = ({onClick}) => {
+const AddButton = ({onClick, maxStock}) => {
   const [value, setValue] = useState(0);
 
   const handleChangeAddButton = (valueAsString, valueAsNumber) => {
@@ -19,10 +19,12 @@ const AddButton = ({onClick}) => {
     <div>
       <NumberInput
         min={0}
+        max={maxStock}
         size='md'
         maxW={20}
         value={value}
         onChange={handleChangeAddButton}
+
       >
         <NumberInputField />
         <NumberInputStepper>

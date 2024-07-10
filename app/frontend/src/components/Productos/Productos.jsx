@@ -100,7 +100,6 @@ const Productos = () => {
         id_peluqueria: local.id_peluqueria,
       };  
       // Crear la boleta de venta
-      console.log(fechaHoy,rut);
       const response = await axios.post('http://localhost:3000/api/boleta_venta', nuevaBoleta);
       const id_boleta_venta = response.data.id_boleta_venta; // Obtener el id_boleta_venta generado en la respuesta
   
@@ -113,8 +112,17 @@ const Productos = () => {
         };
         // Enviar cada detalle al backend
         await axios.post('http://localhost:3000/api/detalle', nuevoDetalle);
+
+        const response = await axios.get(`http://localhost:3000/api/productos/${producto.id}/${local.id_peluqueria}`);
+        const cantidadTotal = (response.data.cant);
+                
+        const cantidadActual = Number(cantidadTotal) - Number(producto.cantidad);
+        await axios.put(`http://localhost:3000/api/productos/${producto.id}/peluquerias/${local.id_peluqueria}`, { cantidad: Number(cantidadActual) });
       }
-  
+      
+      const updatedProductosResponse = await axios.get(`http://localhost:3000/api/peluquerias/productos/${local.id_peluqueria}`);
+      setProductos(updatedProductosResponse.data);
+
       console.log('Boleta creada con detalles:', response.data);
     } catch (error) {
       console.error('Error al crear la boleta:', error);

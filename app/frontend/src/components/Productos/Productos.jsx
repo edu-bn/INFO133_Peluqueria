@@ -100,7 +100,7 @@ const Productos = () => {
         id_peluqueria: local.id_peluqueria,
       };  
       // Crear la boleta de venta
-      console.log('cuchau');
+      console.log(fechaHoy,rut);
       const response = await axios.post('http://localhost:3000/api/boleta_venta', nuevaBoleta);
       const id_boleta_venta = response.data.id_boleta_venta; // Obtener el id_boleta_venta generado en la respuesta
   

@@ -60,7 +60,7 @@ matrizServicio = [
     [1, 'Corte de Cabello Hombre', 15000, 1, 'peluquero'],
     [2, 'Corte de Cabello Mujer', 20000, 2, 'peluquero'],
     [3, 'Tinte para Cabello', 35000, 4, 'peluquero'],
-    [4, 'Peinado', 25000, 2, 'peluquero'],
+    [4, 'Perfilado Barba', 10000, 1, 'peluquero'],
     [5, 'Mascarilla Capilar', 8000, 1, 'peluquero'],
     [6, 'Alisado Permanente', 50000, 6, 'peluquero'],
     [7, 'Depilacion de Cejas', 7000, 1, 'peluquero'],

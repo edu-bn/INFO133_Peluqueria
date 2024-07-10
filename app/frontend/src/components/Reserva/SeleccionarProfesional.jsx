@@ -2,14 +2,17 @@ import { Select, FormControl, FormLabel } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const SeleccionarProfesional = ({idPeluqueria, setProfesionalSeleccionado}) => {
+const SeleccionarProfesional = ({peluqueriaId, setProfesionalSeleccionado, servicioId}) => {
     const [profesionales, setProfesionales] = useState([]);
-    console.log('idPeluqueria', idPeluqueria);
 
     useEffect(() => {
         const fetchProfesionales = async () => {
             try {
-                const response = await axios.get(`http://localhost:3000/api/profesionales/peluqueria/${idPeluqueria}`);
+                let url = `http://localhost:3000/api/profesionales/peluqueria/${peluqueriaId}`;
+                if (servicioId) {
+                    url = `http://localhost:3000/api/profesionales/servicio/${servicioId}/peluqueria/${peluqueriaId}`;
+                }
+                const response = await axios.get(url);
                 setProfesionales(response.data);
             } catch (error) {
                 console.error('Error al obtener profesionales:', error);
@@ -17,11 +20,10 @@ const SeleccionarProfesional = ({idPeluqueria, setProfesionalSeleccionado}) => {
         }
         fetchProfesionales();
     }
-    , [idPeluqueria]);
+    , [peluqueriaId, servicioId]);
 
     const handleChange = (event) => {
         const selectedProfesional = profesionales.find(profesional => profesional.id_profesion === parseInt(event.target.value));
-        console.log('selectedProfesional', selectedProfesional);
         setProfesionalSeleccionado(selectedProfesional);
     }
 

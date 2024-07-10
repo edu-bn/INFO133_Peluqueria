@@ -9,8 +9,18 @@ const getServicios = async (req, res) => {
     }
 }
 
+const getServiciosByProfesional = async (req, res) => {
+    const { id_profesion } = req.params;
+    try {
+        const servicios = await Servicio.getServiciosByProfesional(id_profesion);
+        res.json(servicios);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+}
 
 
 module.exports = {
-    getServicios
+    getServicios,
+    getServiciosByProfesional
 };

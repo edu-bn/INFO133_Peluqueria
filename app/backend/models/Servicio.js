@@ -6,17 +6,16 @@ const getAllServicios = async () => {
     return rows;
 }
 
-const getServiciosByProfesional = async (idProfesional) => {
+const getServiciosByProfesional = async (id_profesion) => {
     const query = `
-        SELECT s.*
-        FROM servicio s
-        JOIN profesion_servicio ps ON s.id_servicio = ps.id_servicio
-        JOIN profesion p ON ps.id_profesion = p.id_profesion
-        WHERE p.rut_empleado = $1;
+    SELECT s.*
+    FROM "profesion-servicio" ps
+    JOIN servicio s ON ps.id_servicio = s.id_servicio
+    WHERE ps.id_profesion = $1;
     `;
-    const { rows } = await pool.query(query, [idProfesional]);
+    const { rows } = await pool.query(query, [id_profesion]);
     return rows;
-}
+};
 
 module.exports = {
     getAllServicios,

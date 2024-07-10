@@ -7,6 +7,7 @@ import SeleccionarServicio from "./SeleccionarServicio.jsx";
 import SeleccionarProfesional from "./SeleccionarProfesional.jsx";
 import SeleccionarFecha from "./SeleccionarFecha.jsx";
 import SeleccionarHora from './SelecionarHora.jsx';
+import ReservarButton from './ReservarButton.jsx';
 
 const Reserva = () => {
   const navigateTo = useNavigate();
@@ -17,6 +18,7 @@ const Reserva = () => {
   if (!local && !rut) {
     showAlert = true;
   }
+  console.log('local, rut', local, rut);
 
   const [fechaSeleccionada, setFechaSeleccionada] = useState(null);
   const [profesionalSeleccionado, setProfesionalSeleccionado] = useState(null);
@@ -38,12 +40,29 @@ const Reserva = () => {
         Volver a la página principal
       </Button>
     </Alert>
-    ) : (<div className="horizontal-container">
-          <SeleccionarFecha setFechaSeleccionada={setFechaSeleccionada}/>
-          <SeleccionarProfesional idPeluqueria={local.id_peluqueria} setProfesionalSeleccionado={setProfesionalSeleccionado}/> 
-          <SeleccionarServicio setServicioSeleccionado={setServicioSeleccionado}></SeleccionarServicio>
-          <SeleccionarHora setHoraSeleccionada={setHoraSeleccionada}></SeleccionarHora>
-      </div>)
+    ) : (
+      <div>
+    <div className="horizontal-container">
+      <SeleccionarFecha setFechaSeleccionada={setFechaSeleccionada}/>
+      <SeleccionarProfesional 
+        peluqueriaId={local.id_peluqueria}
+        setProfesionalSeleccionado={setProfesionalSeleccionado}
+        servicioId={servicioSeleccionado ? servicioSeleccionado.id_servicio : null}
+      /> 
+      <SeleccionarServicio 
+        setServicioSeleccionado={setServicioSeleccionado}
+        profesionalId={profesionalSeleccionado ? profesionalSeleccionado.id_profesion : null}
+      />
+      <SeleccionarHora 
+        setHoraSeleccionada={setHoraSeleccionada}
+        profesionalId={profesionalSeleccionado ? profesionalSeleccionado.id_profesion : null}
+        fecha={fechaSeleccionada ? fechaSeleccionada : null}
+        servicio={servicioSeleccionado ? servicioSeleccionado.id_servicio : null}
+        />
+      </div>
+      <ReservarButton hora={horaSeleccionada} profesional={profesionalSeleccionado} servicio={servicioSeleccionado} rut_cliente={rut} local={local}/>
+      </div>
+      )
     }
   </>
   );

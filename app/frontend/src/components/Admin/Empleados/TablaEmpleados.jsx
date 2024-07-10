@@ -1,24 +1,59 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Table, Thead, Tbody, Tr, Th, Td, TableContainer, Button } from '@chakra-ui/react';
 import EditarCargo from './EditarCargo.jsx';
+import axios from 'axios';
 
 const TablaEmpleados = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedEmpleado, setSelectedEmpleado] = useState(null);
+  const [empleados, setEmpleados] = useState([]);
 
-  const handleEditarCargo = () => {
+  useEffect(() => {
+    const getEmpleados = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/empleados');
+        setEmpleados(response.data);
+      } catch (error) {
+        console.error('Error al obtener empleados:', error);
+      }
+    };
+    getEmpleados();
+  }, []);
+
+  const handleEditarCargo = (empleado) => {
+    setSelectedEmpleado(empleado);
     setIsModalOpen(true);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
+  const handleCloseModal = async (idServicios, isPeluquero, isManicurista) => {
+    console.log('handle:', idServicios, isPeluquero, isManicurista);
 
-  const tabla_empleados = [
-    { rut_empleado: 102543, nombre: 'Goku', apellido: 'Sanchez', telefono: 925742587, id_comuna: 2 },
-    { rut_empleado: 124543, nombre: 'Juan', apellido: 'Lopez', telefono: 925532587, id_comuna: 1 },
-    { rut_empleado: 169543, nombre: '2B', apellido: 'Cortez', telefono: 9257275587, id_comuna: 4 },
-    { rut_empleado: 196543, nombre: 'Roberto', apellido: 'Sierra', telefono: 925642587, id_comuna: 3 },
-  ];
+    try {
+      // Actualizar el cargo del empleado
+      const response = await axios.post('http://localhost:3000/api/empleados/actualizar-servicios', {
+        rut_empleado: selectedEmpleado.rut_empleado,
+        servicios: idServicios,
+        isPeluquero,
+        isManicurista
+      });
+
+      console.log('Cargo actualizado:', response.data);
+
+      // Actualizar la lista de empleados después de la edición
+      const updatedEmpleados = empleados.map(emp => {
+        if (emp.rut_empleado === selectedEmpleado.rut_empleado) {
+          return { ...emp, isPeluquero, isManicurista };
+        }
+        return emp;
+      });
+
+      setEmpleados(updatedEmpleados);
+    } catch (error) {
+      console.error('Error al editar cargo:', error);
+    }
+    setIsModalOpen(false);
+    setSelectedEmpleado(null);
+  };
 
   return (
     <TableContainer>
@@ -32,23 +67,25 @@ const TablaEmpleados = () => {
           </Tr>
         </Thead>
         <Tbody>
-          {tabla_empleados.map((empleado) => (
+          {empleados.map((empleado) => (
             <Tr key={empleado.rut_empleado}>
               <Td>
-                <Button colorScheme="red"> - </Button>
+                <Button colorScheme="red" > - </Button>
               </Td>
               <Td>{empleado.rut_empleado}</Td>
               <Td>{empleado.nombre} {empleado.apellido}</Td>
               <Td>
-                <Button colorScheme="blue" size="sm" onClick={handleEditarCargo}>
+                <Button colorScheme="blue" size="sm" onClick={() => handleEditarCargo(empleado)}>
                   Editar
                 </Button>
-                <EditarCargo isOpen={isModalOpen} onClose={handleCloseModal} />
               </Td>
             </Tr>
           ))}
         </Tbody>
       </Table>
+      {selectedEmpleado && (
+        <EditarCargo isOpen={isModalOpen} onClose={handleCloseModal} empleado={selectedEmpleado} />
+      )}
     </TableContainer>
   );
 };

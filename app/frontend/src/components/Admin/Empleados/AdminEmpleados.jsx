@@ -6,8 +6,9 @@ import NuevoEmpleado from './NuevoEmpleado.jsx';
 
 
 const AdminEmpleados = () => {
-
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    
     const handleNuevoEmpleado = () => {
         setIsModalOpen(true);
       };

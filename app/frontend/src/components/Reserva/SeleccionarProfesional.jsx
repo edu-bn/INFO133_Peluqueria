@@ -1,23 +1,39 @@
 import { Select, FormControl, FormLabel } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-const profesionales = [
-    {id: 1, name : 'Meruane'},
-    {id: 2, name : 'El noctulo'},
-    {id: 3, name : 'Pelao Shuster'},
-    {id: 4, name : 'Bombo fica'},
-    {id: 5, name : 'Martin Alvarado'},
-]
+const SeleccionarProfesional = ({idPeluqueria, setProfesionalSeleccionado}) => {
+    const [profesionales, setProfesionales] = useState([]);
+    console.log('idPeluqueria', idPeluqueria);
 
-const SeleccionarProfesional = () => {
+    useEffect(() => {
+        const fetchProfesionales = async () => {
+            try {
+                const response = await axios.get(`http://localhost:3000/api/profesionales/peluqueria/${idPeluqueria}`);
+                setProfesionales(response.data);
+            } catch (error) {
+                console.error('Error al obtener profesionales:', error);
+            }
+        }
+        fetchProfesionales();
+    }
+    , [idPeluqueria]);
+
+    const handleChange = (event) => {
+        const selectedProfesional = profesionales.find(profesional => profesional.id_profesion === parseInt(event.target.value));
+        console.log('selectedProfesional', selectedProfesional);
+        setProfesionalSeleccionado(selectedProfesional);
+    }
+
 
     return(
         <div>
             <FormControl>
                 <FormLabel>Seleccionar profesionales</FormLabel>
-                <Select placeholder="Seleccione una opcion">
+                <Select placeholder="Seleccione una opcion" onChange={handleChange}>
                     {profesionales.map((option)=> (
-                      <option key={option.id} value={option.name}>
-                      {option.name}
+                      <option key={option.id_profesion} value={option.id_profesion}>
+                      {option.nombre}
                     </option>   
                     ))}
                 </Select>

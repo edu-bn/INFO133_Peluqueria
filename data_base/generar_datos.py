@@ -326,7 +326,7 @@ for i in range(len(matrizEmpleado)):
                 fecha= '20-0'+str(mes)+'-'+str(año)
             else:
                 fecha= '20-'+str(mes)+'-'+str(año)
-            monto= rd.randint(200,1000)*100
+            monto= rd.randint(200,1000)*1000
             matrizPago.append([id_pago,fecha,monto,rut_empleado, id_peluqueria])
             if i == len(matrizEmpleado)-1 and fecha =='20-06-2024':
                 archivo.write(f"\t({id_pago},'{fecha}' , {monto}, {rut_empleado}, {id_peluqueria});\n")
